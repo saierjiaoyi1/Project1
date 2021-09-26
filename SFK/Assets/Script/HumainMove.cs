@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class CatMove : MonoBehaviour
+public class HumainMove : MonoBehaviour
 {
-    public float speed;
-    public Transform cat;
+    public CharacterController cc;
+    public float speed = 4;
+    public float gravity = 4;
+    private float _dropSpeed;
     public CatAnimationController catAnimationController;
 
     private bool _isMoveRight;
     private bool _isMoveLeft;
+
+    private void Start()
+    {
+        cc.detectCollisions = true;
+    }
 
     void Update()
     {
@@ -28,14 +34,17 @@ public class CatMove : MonoBehaviour
         {
             _isMoveLeft = false;
         }
-
         Move();
-        if (Input.GetKey(KeyCode.UpArrow))
+
+        if (!cc.isGrounded)
         {
-            Jump();
+            Drop();
+        }
+        else
+        {
+            _dropSpeed = 0;
         }
     }
-
 
     private void Move()
     {
@@ -47,17 +56,13 @@ public class CatMove : MonoBehaviour
         {
             if (_isMoveLeft)
             {
-                var newPos = cat.position;
-                newPos += new Vector3(-1, 0, 0) * speed * Time.deltaTime;
-                cat.position = newPos;
+                cc.Move(Vector3.left * Time.deltaTime * speed);
                 catAnimationController.startWalk = true;
                 TurnLeft();
             }
             else if (_isMoveRight)
             {
-                var newPos = cat.position;
-                newPos += new Vector3(1, 0, 0) * speed * Time.deltaTime;
-                cat.position = newPos;
+                cc.Move(Vector3.right * Time.deltaTime * speed);
                 catAnimationController.startWalk = true;
                 TurnRight();
             }
@@ -78,13 +83,19 @@ public class CatMove : MonoBehaviour
         catAnimationController.doJump = true;
     }
 
+    void Drop()
+    {
+        _dropSpeed += gravity * Time.deltaTime;
+        cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+    }
+
     void TurnRight()
     {
-        cat.localEulerAngles = new Vector3(0, 90, 0);
+        transform.localEulerAngles = new Vector3(0, 90, 0);
     }
 
     void TurnLeft()
     {
-        cat.localEulerAngles = new Vector3(0, 270, 0);
+        transform.localEulerAngles = new Vector3(0, 270, 0);
     }
 }
