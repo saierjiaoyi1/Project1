@@ -16,6 +16,7 @@ public class ItemPushTrapBehaviour : MonoBehaviour
             return;
         }
 
+
         if (other.tag == "DemoCat")
         {
             _triggered = true;

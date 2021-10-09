@@ -1,8 +1,25 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class CameraMove : MonoBehaviour
 {
     public float speed;
+
+    public float endValue;
+    public float duration;
+    public CatAnimationController catAnimationController;
+    public Camera cam;
+
+    private void Start()
+    {
+        cam.DOOrthoSize(endValue, duration).SetEase(Ease.InOutCubic).OnComplete(Hello);
+    }
+
+    void Hello()
+    {
+        Debug.Log("Hello");
+        catAnimationController.doEat = true;
+    }
 
     void Update()
     {
