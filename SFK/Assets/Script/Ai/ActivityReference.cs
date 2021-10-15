@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AiActions : MonoBehaviour
+public class ActivityReference : MonoBehaviour
 {
     public ActivityPrototype walkaround;
     public ActivityPrototype stay;

@@ -7,7 +7,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return null;
+            return null;//TODO
         }
     }
 
@@ -15,7 +15,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return null;
+            return null;//TODO
         }
     }
 
@@ -50,7 +50,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return 100;
+            return 100;//TODO
         }
     }
 
@@ -58,7 +58,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return 100;
+            return 100;//TODO
         }
     }
 }
