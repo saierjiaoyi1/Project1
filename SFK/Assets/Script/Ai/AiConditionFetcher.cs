@@ -37,7 +37,6 @@ public class AiConditionFetcher : MonoBehaviour
         }
     }
 
-
     public bool HasNatureCall
     {
         get

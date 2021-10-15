@@ -4,7 +4,7 @@ using System.Collections;
 [System.Serializable]
 public class ActivityPrototype
 {
-    public string title;
+    public string id;
     public string desc;
 
     public int piority;

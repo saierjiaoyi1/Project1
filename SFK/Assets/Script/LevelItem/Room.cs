@@ -5,6 +5,8 @@ public class Room : MonoBehaviour
 {
     public RoomCheckpoint[] roomCps;
 
+    public Checkpoint stayCp;
+
     public Checkpoint GetExitCpAvoidRight()
     {
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
@@ -19,7 +21,7 @@ public class Room : MonoBehaviour
             }
         }
 
-        return candidats[Random.Range(0, candidats.Count)].cp;
+        return candidats[Random.Range(0, candidats.Count - 1)].cp;
     }
 
     public Checkpoint GetExitCpAvoidLeft()
@@ -36,7 +38,7 @@ public class Room : MonoBehaviour
             }
         }
 
-        return candidats[Random.Range(0, candidats.Count)].cp;
+        return candidats[Random.Range(0, candidats.Count - 1)].cp;
     }
 
     public Checkpoint GetExitCpAvoidCenter()
@@ -53,6 +55,6 @@ public class Room : MonoBehaviour
             }
         }
 
-        return candidats[Random.Range(0, candidats.Count)].cp;
+        return candidats[Random.Range(0, candidats.Count - 1)].cp;
     }
 }

@@ -5,7 +5,7 @@ public class CatAiBehaviour : Ticker
 {
     public ActivityReference activities;
 
-    public CheckPointAnalyser CheckPointAnalyser;
+    public CheckPointAnalyser checkPointAnalyser;
 
     public AiConditionFetcher aiConditionFetcher;
 

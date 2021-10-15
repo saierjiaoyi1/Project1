@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RoomCheckpoint : MonoBehaviour
+[System.Serializable]
+public struct RoomCheckpoint 
 {
     public Checkpoint cp;
 
