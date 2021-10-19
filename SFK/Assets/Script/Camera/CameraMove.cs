@@ -9,18 +9,32 @@ public class CameraMove : MonoBehaviour
     public float duration;
     public CatAnimationController catAnimationController;
     public Camera cam;
+    public Transform camStartPos;
+    public Transform camEndPos;
 
     private void Start()
     {
-        cam.DOOrthoSize(endValue, duration).SetEase(Ease.InOutCubic).OnComplete(Hello);
+        cam.DOOrthoSize(endValue, duration).SetEase(Ease.InOutCubic).OnComplete(CameraMoveDone);
+        cam.transform.DOMove(camEndPos.position, duration);
     }
 
-    void Hello()
+    void CameraMoveDone()
     {
-        Debug.Log("Hello");
-        catAnimationController.doEat = true;
+        Debug.Log("CameraMoveDone");
+        EnableGameplayController();
+        CatFlee();
     }
 
+    void EnableGameplayController()
+    {
+
+    }
+
+    void CatFlee()
+    {
+        catAnimationController.doEat = true;
+        //play sound
+    }
     void Update()
     {
         var dir = Vector3.zero;
@@ -41,7 +55,7 @@ public class CameraMove : MonoBehaviour
             dir += Vector3.right;
         }
 
-        Move(dir);
+        Move(dir.normalized);
     }
 
 

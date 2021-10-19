@@ -17,7 +17,7 @@ public class ItemPushTrapBehaviour : MonoBehaviour
         }
 
 
-        if (other.tag == "DemoCat")
+        if (other.tag == "Cat")
         {
             _triggered = true;
             foreach (var item in items)
