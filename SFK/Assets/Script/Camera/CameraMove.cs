@@ -4,18 +4,23 @@ using DG.Tweening;
 public class CameraMove : MonoBehaviour
 {
     public float speed;
-
-    public float endValue;
+    public float startOrthoSize;
+    public float endOrthoSize;
     public float duration;
-    public CatAnimationController catAnimationController;
+
     public Camera cam;
     public Transform camStartPos;
     public Transform camEndPos;
 
     private void Start()
     {
-        cam.DOOrthoSize(endValue, duration).SetEase(Ease.InOutCubic).OnComplete(CameraMoveDone);
+        cam.transform.position = camStartPos.position;
+        cam.transform.eulerAngles = camStartPos.eulerAngles;
+        cam.orthographicSize = startOrthoSize;
+
+        cam.DOOrthoSize(endOrthoSize, duration).SetEase(Ease.InOutCubic).OnComplete(CameraMoveDone);
         cam.transform.DOMove(camEndPos.position, duration);
+        cam.transform.DORotate(new Vector3(10, 0, 0), duration);
     }
 
     void CameraMoveDone()
@@ -27,14 +32,17 @@ public class CameraMove : MonoBehaviour
 
     void EnableGameplayController()
     {
-
+        GameSystem.instance.state = GameSystem.GameState.Playing;
     }
 
     void CatFlee()
     {
-        catAnimationController.doEat = true;
+        //cat go out
+
         //play sound
+        Cat.cats[0].Test();
     }
+
     void Update()
     {
         var dir = Vector3.zero;
@@ -61,6 +69,9 @@ public class CameraMove : MonoBehaviour
 
     private void Move(Vector3 direction)
     {
-        transform.position += direction * Time.deltaTime * speed;
+        if (GameSystem.instance.state == GameSystem.GameState.Playing)
+        {
+            transform.position += direction * Time.deltaTime * speed;
+        }
     }
 }

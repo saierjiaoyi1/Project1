@@ -9,7 +9,7 @@ public class HumainMove : MonoBehaviour
 
     private float _dropSpeed;
 
-    public CatAnimationController catAnimationController;
+    public CatAnimationController animationController;
 
     private Vector2 _moveDirection;
 
@@ -26,11 +26,15 @@ public class HumainMove : MonoBehaviour
     void Update()
     {
         _moveDirection = new Vector2(0, 0);
-        ReadKeyDown();
-        ReadKeyUp();
-        SetKeyBoolValue();
-        Move();
 
+        if (GameSystem.instance.state == GameSystem.GameState.Playing)
+        {
+            ReadKeyDown();
+            ReadKeyUp();
+            SetKeyBoolValue();
+        }
+
+        Move();
         if (!cc.isGrounded)
         { Drop(); }
         else { _dropSpeed = 0; }
@@ -109,7 +113,7 @@ public class HumainMove : MonoBehaviour
 
 
         cc.Move(moveDir);
-        catAnimationController.startWalk = true;
+        animationController.startWalk = true;
 
         //TurnToDirection();
         var rot = Quaternion.LookRotation(moveDir);
@@ -118,12 +122,12 @@ public class HumainMove : MonoBehaviour
 
     void Stop()
     {
-        catAnimationController.stopWalk = true;
+        animationController.stopWalk = true;
     }
 
     void Jump()
     {
-        catAnimationController.doJump = true;
+        animationController.doJump = true;
     }
 
     void Drop()
