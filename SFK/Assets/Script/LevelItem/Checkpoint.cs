@@ -3,9 +3,7 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour
 {
-    public bool isIntermediateCp;
-
-    public bool isJumpCp;
-
-    public Checkpoint monoCp;
+    public bool isFall;
+    public bool isJump;
+    public Checkpoint target;
 }

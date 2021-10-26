@@ -18,6 +18,8 @@ public class HumainMove : MonoBehaviour
     bool _rightKeyDown;
     bool _leftKeyDown;
 
+    public Transform rotatePart;
+
     private void Start()
     {
         cc.detectCollisions = true;
@@ -35,6 +37,7 @@ public class HumainMove : MonoBehaviour
         }
 
         Move();
+
         if (!cc.isGrounded)
         { Drop(); }
         else { _dropSpeed = 0; }
@@ -102,7 +105,7 @@ public class HumainMove : MonoBehaviour
 
     private void Move()
     {
-        if (_moveDirection.magnitude == 0)
+        if (Mathf.Approximately(_moveDirection.magnitude, 0))
         {
             Stop();
             return;
@@ -111,13 +114,12 @@ public class HumainMove : MonoBehaviour
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
         moveDir = moveDir.normalized * speed * Time.deltaTime;
 
-
         cc.Move(moveDir);
         animationController.startWalk = true;
 
         //TurnToDirection();
         var rot = Quaternion.LookRotation(moveDir);
-        transform.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
     }
 
     void Stop()
@@ -125,14 +127,10 @@ public class HumainMove : MonoBehaviour
         animationController.stopWalk = true;
     }
 
-    void Jump()
-    {
-        animationController.doJump = true;
-    }
-
     void Drop()
     {
         _dropSpeed += gravity * Time.deltaTime;
         cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+
     }
 }

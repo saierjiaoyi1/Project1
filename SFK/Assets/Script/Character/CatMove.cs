@@ -14,10 +14,14 @@ public class CatMove : MonoBehaviour
 
     private Vector2 _moveDirection;
 
+    public float jumpPower = 10;
+    private bool _isJumping = false;
+
+
     void Update()
     {
         Move();
-        if (!cc.isGrounded)
+        if (!cc.isGrounded || _isJumping)
         { Drop(); }
         else { _dropSpeed = 0; }
     }
@@ -50,13 +54,22 @@ public class CatMove : MonoBehaviour
 
     void Jump()
     {
-        animationController.doJump = true;
+        if (cc.isGrounded)
+        {
+            _isJumping = true;
+            animationController.doJump = true;
+            _dropSpeed = -jumpPower;
+        }
     }
 
     void Drop()
     {
         _dropSpeed += gravity * Time.deltaTime;
         cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+        if (cc.isGrounded && _dropSpeed >= 0)
+        {
+            _isJumping = false;
+        }
     }
 
 }

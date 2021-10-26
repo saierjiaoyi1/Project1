@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviour
 {
-    public RoomCheckpoint[] roomCps;
+    public RoomCheckpoint[] exits;
 
     public Checkpoint stayCp;
 
     public Checkpoint GetExitCpAvoidRight()
     {
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
-        foreach (var rcp in roomCps)
+        foreach (var rcp in exits)
         {
             if (rcp.weightAvoidRight > 0)
             {
@@ -27,7 +27,7 @@ public class Room : MonoBehaviour
     public Checkpoint GetExitCpAvoidLeft()
     {
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
-        foreach (var rcp in roomCps)
+        foreach (var rcp in exits)
         {
             if (rcp.weightAvoidLeft > 0)
             {
@@ -44,7 +44,7 @@ public class Room : MonoBehaviour
     public Checkpoint GetExitCpAvoidCenter()
     {
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
-        foreach (var rcp in roomCps)
+        foreach (var rcp in exits)
         {
             if (rcp.weightAvoidCenter > 0)
             {
