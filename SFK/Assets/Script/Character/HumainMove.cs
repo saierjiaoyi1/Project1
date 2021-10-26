@@ -9,7 +9,7 @@ public class HumainMove : MonoBehaviour
 
     private float _dropSpeed;
 
-    public CatAnimationController animationController;
+    public HumanAnimationBehaviour animationController;
 
     private Vector2 _moveDirection;
 
@@ -119,7 +119,7 @@ public class HumainMove : MonoBehaviour
 
         //TurnToDirection();
         var rot = Quaternion.LookRotation(moveDir);
-        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y+90, 0);
     }
 
     void Stop()
