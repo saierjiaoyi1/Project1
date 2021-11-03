@@ -14,9 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cat1: {fileID: 0}
-  cat2: {fileID: 0}
+  cat2: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
   cat3: {fileID: 0}
   cat4: {fileID: 0}
-  itemCount_bug: 0
-  itemCount_catSnack: 0
-  itemCount_catToiletAcc: 0

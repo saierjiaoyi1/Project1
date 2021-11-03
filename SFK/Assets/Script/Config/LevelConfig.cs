@@ -12,7 +12,12 @@ public class LevelConfig : ScriptableObject
     public CatConfig cat3;
     public CatConfig cat4;
 
-    public int itemCount_bug;
-    public int itemCount_catSnack;
-    public int itemCount_catToiletAcc;
+    public UsableItemsCount usableItemsCount;
+}
+
+public struct UsableItemsCount
+{
+    public int bug;
+    public int catSnack;
+    public int catToiletAcc;
 }
