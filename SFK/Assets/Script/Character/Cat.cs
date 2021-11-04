@@ -28,8 +28,8 @@ public class Cat : MonoBehaviour
 
     public void Init(CatConfig cc, Transform spawnTrans)
     {
-        Debug.Log("cat Init");
-        Debug.Log(cc);
+        //Debug.Log("cat Init");
+        //Debug.Log(cc);
         cfg = cc;
 
         if (cc == null)

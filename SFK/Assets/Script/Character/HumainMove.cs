@@ -62,6 +62,7 @@ public class HumainMove : MonoBehaviour
                 {
                     _postNoControlAction?.Invoke();
                     _postNoControlAction = null;
+                    return;
                 }
             }
             else
@@ -71,7 +72,6 @@ public class HumainMove : MonoBehaviour
         }
 
         Move();
-
         if (!cc.isGrounded)
         { Drop(); }
         else { _dropSpeed = 0; }

@@ -28,6 +28,8 @@ public class CatMove : MonoBehaviour
 
     void Update()
     {
+        // if (GameSystem.instance.state == GameSystem.GameState.Playing)
+
         Move();
         if (!cc.isGrounded)
         { Drop(); }

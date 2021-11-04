@@ -29,8 +29,12 @@ public class GameSystem : MonoBehaviour
     {
         CameraMove.instance.ResetPosition();
         GameSystem.instance.state = GameSystem.GameState.None;
-        LevelSystem.instance.CreateNewLevel(LevelSystem.instance.GetNextLevel());
-        UiSystem.instance.OnPreplay();
+        var level = LevelSystem.instance.GetNextLevel();
+        if (level!=null)
+        {
+            LevelSystem.instance.CreateNewLevel(LevelSystem.instance.GetNextLevel());
+            UiSystem.instance.OnPreplay();
+        }
     }
 
     public void EnterGame()

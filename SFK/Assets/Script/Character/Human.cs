@@ -5,17 +5,15 @@ public class Human : MonoBehaviour
 {
     public HumainMove hm;
     public ChatBubble chatBubble;
-    private void Awake()
-    {
-    }
 
     public void Init()
     {
         gameObject.SetActive(true);
-        Debug.Log("Init human");
+        //Debug.Log("Init human");
         var trans = LevelSystem.instance.levelBehaviour.level.spawnPos_human;
         transform.SetPositionAndRotation(trans.position, trans.rotation);
-        Debug.Log(trans.position);
+        //Debug.Log(trans.position);
+        //Debug.Log(transform.position);
         hm.ResetMove();
     }
 

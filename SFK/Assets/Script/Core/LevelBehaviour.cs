@@ -24,14 +24,13 @@ public class LevelBehaviour : MonoBehaviour
         levelTitle.text = cfg.title;
         levelDesc.text = cfg.desc;
 
+        SyncItems(cfg.usableItemsCount);
+
         human.Init();
         cat1.Init(cfg.cat1, level.spawnPos_cat1);
         cat2.Init(cfg.cat2, level.spawnPos_cat2);
         cat3.Init(cfg.cat3, level.spawnPos_cat3);
         cat4.Init(cfg.cat4, level.spawnPos_cat4);
-      
-
-        SyncItems(cfg.usableItemsCount);
     }
 
     public void SyncItems(UsableItemsCount usableItemsCount)
