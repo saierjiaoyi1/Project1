@@ -42,7 +42,8 @@ public class HumainMove : MonoBehaviour
     public void Caught()
     {
         animationController.doCatch = true;
-        _forceNoControllerTimer = 3;
+        _forceNoControllerTimer = 2;
+        _moveDirection = new Vector2(0, 0);
     }
 
     void Update()
@@ -50,14 +51,14 @@ public class HumainMove : MonoBehaviour
         _moveDirection = new Vector2(0, 0);
         if (GameSystem.instance.state == GameSystem.GameState.Playing)
         {
+            ReadKeyDown();
+            ReadKeyUp();
             if (_forceNoControllerTimer > 0)
             {
                 _forceNoControllerTimer -= Time.deltaTime;
             }
             else
             {
-                ReadKeyDown();
-                ReadKeyUp();
                 SetKeyBoolValue();
             }
         }

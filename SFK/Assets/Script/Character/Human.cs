@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Human : MonoBehaviour
 {
     public HumainMove hm;
-
+    public ChatBubble chatBubble;
     private void Awake()
     {
     }
@@ -20,5 +20,6 @@ public class Human : MonoBehaviour
     public void Caught()
     {
         hm.Caught();
+        chatBubble.Say("Catch you!");
     }
 }
