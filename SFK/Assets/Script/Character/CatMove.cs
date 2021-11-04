@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class CatMove : MonoBehaviour
 {
@@ -15,12 +16,17 @@ public class CatMove : MonoBehaviour
     private Vector2 _moveDirection;
 
     private bool _isJumping = false;
+    public Transform rotatePart;
 
+    private void Start()
+    {
+        cc.detectCollisions = true;
+    }
 
     void Update()
     {
         Move();
-        if (!cc.isGrounded || _isJumping)
+        if (!cc.isGrounded)
         { Drop(); }
         else { _dropSpeed = 0; }
     }
@@ -28,7 +34,7 @@ public class CatMove : MonoBehaviour
 
     private void Move()
     {
-        if (_moveDirection.magnitude == 0)
+        if (Mathf.Approximately(_moveDirection.magnitude, 0))
         {
             Stop();
             return;
@@ -36,19 +42,18 @@ public class CatMove : MonoBehaviour
 
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
         moveDir = moveDir.normalized * speed * Time.deltaTime;
-
-
         cc.Move(moveDir);
         animationController.startWalk = true;
 
-        //TurnToDirection();
         var rot = Quaternion.LookRotation(moveDir);
-        transform.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
     }
 
     void Stop()
     {
         animationController.stopWalk = true;
+        cc.Move(Vector3.zero);
     }
 
     void Jump(float jumpPower)

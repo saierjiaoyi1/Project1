@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class HumainMove : MonoBehaviour
 {
@@ -38,7 +39,6 @@ public class HumainMove : MonoBehaviour
     void Update()
     {
         _moveDirection = new Vector2(0, 0);
-
         if (GameSystem.instance.state == GameSystem.GameState.Playing)
         {
             ReadKeyDown();
@@ -55,7 +55,7 @@ public class HumainMove : MonoBehaviour
 
     private void ReadKeyDown()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift)|| Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
         {
             _shiftKeyDown = true;
             animationController.startAcc = true;
@@ -80,7 +80,7 @@ public class HumainMove : MonoBehaviour
 
     private void ReadKeyUp()
     {
-        if (Input.GetKeyUp(KeyCode.LeftShift)|| Input.GetKeyUp(KeyCode.RightShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
         {
             _shiftKeyDown = false;
             animationController.stopAcc = true;
@@ -133,13 +133,12 @@ public class HumainMove : MonoBehaviour
 
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
         moveDir = moveDir.normalized * speed * Time.deltaTime;
-
         cc.Move(moveDir);
         animationController.startWalk = true;
-     
-        //TurnToDirection
+
         var rot = Quaternion.LookRotation(moveDir);
-        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y + 90, 0);
+        //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y + 90, 0), 0.5f);
     }
 
     public void ResetMove()
@@ -159,6 +158,7 @@ public class HumainMove : MonoBehaviour
 
     void Stop()
     {
+        cc.Move(Vector3.zero);
         animationController.stopWalk = true;
     }
 

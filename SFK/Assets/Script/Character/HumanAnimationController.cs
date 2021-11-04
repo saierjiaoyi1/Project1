@@ -46,12 +46,12 @@ public class HumanAnimationController : MonoBehaviour
         }
         if (startAcc)
         {
-            startWalk = false;
+            startAcc = false;
             animator.SetBool("Acc", true);
         }
         if (stopAcc)
         {
-            stopWalk = false;
+            stopAcc = false;
             animator.SetBool("Acc", false);
         }
     }
