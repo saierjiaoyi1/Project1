@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AiConditionFetcher : MonoBehaviour
+public class AiConditionFetcher : Ticker
 {
     public int hungerToleranceMax;
     public int toiletToleranceMax;
     private int _hungerValue;
-    public int _toiletValue;
+    private int _toiletValue;
+    private float _alertRange;
 
-    private float _alertRannge;
+    private Cat _cat;
 
+    private void Awake()
+    {
+        _cat = GetComponent<Cat>();
+    }
     public Transform NearbyHuman
     {
         get
@@ -24,6 +29,19 @@ public class AiConditionFetcher : MonoBehaviour
         {
             return null;//TODO
         }
+    }
+
+    protected override void Tick()
+    {
+        if (GameSystem.instance.state != GameSystem.GameState.Playing)
+        {
+            return;
+        }
+
+        _hungerValue += 1;
+        _toiletValue += 1;
+        _cat.cub.SetHunger(HungryRatio);
+        _cat.cub.SetToilet(NatureCallRatio);
     }
 
     public bool HasDetectedHuman()
@@ -56,7 +74,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return (float)_hungerValue/ hungerToleranceMax;
+            return (float)_hungerValue / hungerToleranceMax;
         }
     }
 
@@ -82,6 +100,6 @@ public class AiConditionFetcher : MonoBehaviour
 
     public void SetAlertRange(float v)
     {
-        _alertRannge = v;
+        _alertRange = v;
     }
 }
