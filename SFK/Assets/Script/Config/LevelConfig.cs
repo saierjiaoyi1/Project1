@@ -15,6 +15,7 @@ public class LevelConfig : ScriptableObject
     public UsableItemsCount usableItemsCount;
 }
 
+[Serializable]
 public struct UsableItemsCount
 {
     public int bug;
