@@ -38,7 +38,7 @@ public class Cat : MonoBehaviour
             cub.Hide();
             return;
         }
-
+        cm.cc.enabled = false;
         cub.Show();
         gameObject.SetActive(true);
         catAppearanceBehaviour.mr.material = cc.mat;
@@ -49,6 +49,7 @@ public class Cat : MonoBehaviour
         cab.aiConditionFetcher.SetAlertRange(cfg.alertRange);
 
         transform.SetPositionAndRotation(spawnTrans.position, spawnTrans.rotation);
+        cm.cc.enabled = true;
     }
 
     private void OnDestroy()

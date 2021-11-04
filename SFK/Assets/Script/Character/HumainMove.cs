@@ -50,11 +50,13 @@ public class HumainMove : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log(transform.position.x);
         _moveDirection = new Vector2(0, 0);
         if (GameSystem.instance.state == GameSystem.GameState.Playing)
         {
             ReadKeyDown();
             ReadKeyUp();
+
             if (_forceNoControllerTimer > 0)
             {
                 _forceNoControllerTimer -= Time.deltaTime;
@@ -62,8 +64,9 @@ public class HumainMove : MonoBehaviour
                 {
                     _postNoControlAction?.Invoke();
                     _postNoControlAction = null;
-                    return;
+                    // Debug.Log("_postNoControlAction");
                 }
+                return;
             }
             else
             {
@@ -167,6 +170,7 @@ public class HumainMove : MonoBehaviour
 
     public void ResetMove()
     {
+        cc.enabled = false;
         _dropSpeed = 0;
 
         _upKeyDown = false;
@@ -192,11 +196,13 @@ public class HumainMove : MonoBehaviour
     {
         cc.Move(Vector3.zero);
         animationController.stopWalk = true;
+        //Debug.Log("Stop" + transform.position.x);
     }
 
     void Drop()
     {
         _dropSpeed += gravity * Time.deltaTime;
         cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+        //Debug.Log("Drop" + transform.position.x);
     }
 }

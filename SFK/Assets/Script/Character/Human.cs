@@ -10,11 +10,15 @@ public class Human : MonoBehaviour
     {
         gameObject.SetActive(true);
         //Debug.Log("Init human");
+        hm.ResetMove();
         var trans = LevelSystem.instance.levelBehaviour.level.spawnPos_human;
         transform.SetPositionAndRotation(trans.position, trans.rotation);
+
+        hm.cc.enabled = true;
+        //Debug.LogWarning("ResetMove");
         //Debug.Log(trans.position);
         //Debug.Log(transform.position);
-        hm.ResetMove();
+        //hm.ResetMove();
     }
 
     public void Caught()

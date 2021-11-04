@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: baimao
   title: "\u767D\u732B"
-  desc: "\u554A\u5B9E\u6253\u5B9E\u591A"
+  desc: 1111
   speed: 5
   hungerEndurance: 77
   toiletEndurance: 115
