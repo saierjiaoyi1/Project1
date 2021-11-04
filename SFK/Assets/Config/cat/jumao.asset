@@ -16,7 +16,7 @@ MonoBehaviour:
   title: "\u6A58\u732B"
   desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
   speed: 2.58
-  hungerEndurance: 113.6
-  toiletEndurance: 92.1
+  hungerEndurance: 113
+  toiletEndurance: 92
   alertRange: 5.13
-  mat: {fileID: 2100000, guid: 27ec793d5e225144dbed106b3b69483a, type: 2}
+  mat: {fileID: 2100000, guid: 0ab77e2632497734dae7a4c5a6d8e883, type: 2}

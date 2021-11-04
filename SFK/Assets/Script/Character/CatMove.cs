@@ -14,7 +14,6 @@ public class CatMove : MonoBehaviour
 
     private Vector2 _moveDirection;
 
-    public float jumpPower = 10;
     private bool _isJumping = false;
 
 
@@ -52,7 +51,7 @@ public class CatMove : MonoBehaviour
         animationController.stopWalk = true;
     }
 
-    void Jump()
+    void Jump(float jumpPower)
     {
         if (cc.isGrounded)
         {
@@ -72,4 +71,15 @@ public class CatMove : MonoBehaviour
         }
     }
 
+    public void ResetMove()
+    {
+        Stop();
+        _dropSpeed = 0;
+
+        animationController.doJump = false;
+        animationController.doSound = false;
+        animationController.doEat = false;
+        animationController.startWalk = false;
+        animationController.stopWalk = false;
+    }
 }

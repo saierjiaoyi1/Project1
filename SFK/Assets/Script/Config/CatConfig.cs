@@ -12,9 +12,9 @@ public class CatConfig : ScriptableObject
     [Range(1, 5)]
     public float speed;
     [Range(30, 180)]
-    public float hungerEndurance;
+    public int hungerEndurance;
     [Range(30, 180)]
-    public float toiletEndurance;
+    public int toiletEndurance;
     [Range(2, 10)]
     public float alertRange;
 

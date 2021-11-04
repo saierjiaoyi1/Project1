@@ -3,6 +3,13 @@ using System.Collections;
 
 public class AiConditionFetcher : MonoBehaviour
 {
+    public int hungerToleranceMax;
+    public int toiletToleranceMax;
+    private int _hungerValue;
+    public int _toiletValue;
+
+    private float _alertRannge;
+
     public Transform NearbyHuman
     {
         get
@@ -33,7 +40,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return HungryRatio <= 0;
+            return HungryRatio >= 1;
         }
     }
 
@@ -41,7 +48,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return HungryRatio <= 0;
+            return NatureCallRatio >= 1;
         }
     }
 
@@ -49,7 +56,7 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return 100;//TODO
+            return (float)_hungerValue/ hungerToleranceMax;
         }
     }
 
@@ -57,7 +64,24 @@ public class AiConditionFetcher : MonoBehaviour
     {
         get
         {
-            return 100;//TODO
+            return (float)_toiletValue / toiletToleranceMax;
         }
+    }
+
+    public void SetHungerMax(int v)
+    {
+        _hungerValue = 0;
+        hungerToleranceMax = v;
+    }
+
+    public void SetToiletMax(int v)
+    {
+        _toiletValue = 0;
+        toiletToleranceMax = v;
+    }
+
+    public void SetAlertRange(float v)
+    {
+        _alertRannge = v;
     }
 }

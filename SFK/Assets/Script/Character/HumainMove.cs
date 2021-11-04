@@ -4,12 +4,22 @@ public class HumainMove : MonoBehaviour
 {
     public CharacterController cc;
 
-    public float speed = 4;
+    public float speed
+    {
+        get
+        {
+            if (_shiftKeyDown)
+                return runSpeed;
+
+            return walkSpeed;
+        }
+    }
     public float gravity = 4;
 
     private float _dropSpeed;
-
-    public HumanAnimationBehaviour animationController;
+    public float walkSpeed = 3;
+    public float runSpeed = 5;
+    public HumanAnimationController animationController;
 
     private Vector2 _moveDirection;
 
@@ -17,7 +27,7 @@ public class HumainMove : MonoBehaviour
     bool _downKeyDown;
     bool _rightKeyDown;
     bool _leftKeyDown;
-
+    bool _shiftKeyDown;
     public Transform rotatePart;
 
     private void Start()
@@ -45,6 +55,11 @@ public class HumainMove : MonoBehaviour
 
     private void ReadKeyDown()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift)|| Input.GetKeyDown(KeyCode.RightShift))
+        {
+            _shiftKeyDown = true;
+            animationController.startAcc = true;
+        }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             _rightKeyDown = true;
@@ -65,6 +80,11 @@ public class HumainMove : MonoBehaviour
 
     private void ReadKeyUp()
     {
+        if (Input.GetKeyUp(KeyCode.LeftShift)|| Input.GetKeyUp(KeyCode.RightShift))
+        {
+            _shiftKeyDown = false;
+            animationController.stopAcc = true;
+        }
         if (Input.GetKeyUp(KeyCode.RightArrow))
         {
             _rightKeyDown = false;
@@ -116,10 +136,25 @@ public class HumainMove : MonoBehaviour
 
         cc.Move(moveDir);
         animationController.startWalk = true;
-
-        //TurnToDirection();
+     
+        //TurnToDirection
         var rot = Quaternion.LookRotation(moveDir);
-        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y+90, 0);
+        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y + 90, 0);
+    }
+
+    public void ResetMove()
+    {
+        Stop();
+        _dropSpeed = 0;
+        _shiftKeyDown = false;
+
+        animationController.doPick = false;
+        animationController.doCatch = false;
+        animationController.doStandup = false;
+        animationController.startWalk = false;
+        animationController.stopWalk = false;
+        animationController.startAcc = false;
+        animationController.stopAcc = false;
     }
 
     void Stop()
@@ -131,6 +166,5 @@ public class HumainMove : MonoBehaviour
     {
         _dropSpeed += gravity * Time.deltaTime;
         cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
-
     }
 }

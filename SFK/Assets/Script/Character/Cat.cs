@@ -9,15 +9,40 @@ public class Cat : MonoBehaviour
 
     public CatAnimationController cac;
     public CatAiBehaviour cab;
-
+    public CatAppearanceBehaviour catAppearanceBehaviour;
+    public CatConfig cfg { get; private set; }
+    public CatMove cm;
 
     private void Awake()
     {
         cats.Add(this);
     }
 
-    public void Test()
+    public void Init(CatConfig cc, Transform spawnTrans)
     {
-        Debug.Log("flee and jump");
+        Debug.Log("cat Init");
+        cfg = cc;
+
+        if (cc == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        gameObject.SetActive(true);
+        catAppearanceBehaviour.mr.material = cc.mat;
+
+        cm.speed = cfg.speed;
+        cm.ResetMove();
+        cab.aiConditionFetcher.SetHungerMax(cfg.hungerEndurance);
+        cab.aiConditionFetcher.SetHungerMax(cfg.toiletEndurance);
+        cab.aiConditionFetcher.SetAlertRange(cfg.alertRange);
+
+        transform.SetPositionAndRotation(spawnTrans.position, spawnTrans.rotation);
+    }
+
+    private void OnDestroy()
+    {
+        cats.Remove(this);
     }
 }

@@ -59,9 +59,12 @@ public class LevelSystem : MonoBehaviour
 
     public LevelRuntimeData data;
 
+    public LevelBehaviour levelBehaviour;
+
     private void Awake()
     {
         instance = this;
+        levelsPassed = new List<string>();
     }
 
     public void RegisterLevelPass()
@@ -78,6 +81,34 @@ public class LevelSystem : MonoBehaviour
         data.id = cfg.id;
         data.usableItemsCount = cfg.usableItemsCount;
         data.startTime = Time.time;
+
+        levelBehaviour.Recreate(cfg);
+    }
+
+    public void TryUseItem(string id)
+    {
+        if (CanUseItem(id))
+        {
+            UseItem(id);
+        }
+        else
+        {
+            Debug.Log("can not use item");
+        }
+    }
+
+    bool CanUseItem(string id)
+    {
+        if (data.usableItemsCount.Get(id) <= 0)
+            return false;
+
+        return true;
+    }
+
+    public void UseItem(string id)
+    {
+        data.usableItemsCount.Set(id, data.usableItemsCount.Get(id) - 1);
+        levelBehaviour.SyncItems(data.usableItemsCount);
     }
 }
 

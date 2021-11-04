@@ -19,27 +19,32 @@ public class GameSystem : MonoBehaviour
 
     public GameState state { get; private set; }
 
+    private void Start()
+    {
+        PrepareGame();
+    }
+
     public void PrepareGame()
     {
         SetupLevel();
     }
 
+    public void EnterGame()
+    {
+        CameraMove.instance.StartMove();
+    }
+
     void SetupLevel()
     {
-
+        LevelSystem.instance.CreateNewLevel(LevelSystem.instance.GetNextLevel());
     }
 
     public void StartGame()
     {
         EnableGameplayController();
-    }
-
-    void CatFlee()
-    {
         //cat go out
 
         //play sound
-        Cat.cats[0].Test();
     }
 
     void EnableGameplayController()
