@@ -7,6 +7,9 @@ public class LevelConfig : ScriptableObject
 {
     public string id;
 
+    public string title;
+    public string desc;
+
     public CatConfig cat1;
     public CatConfig cat2;
     public CatConfig cat3;

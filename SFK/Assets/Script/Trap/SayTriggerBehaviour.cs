@@ -9,6 +9,11 @@ public class SayTriggerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GameSystem.instance.state != GameSystem.GameState.Playing)
+        {
+            return;
+        }
+
         if (other.tag == "Human" && checkHuman)
         {
 

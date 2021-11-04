@@ -33,6 +33,7 @@ public class HumainMove : MonoBehaviour
     public Transform rotatePart;
 
     private float _forceNoControllerTimer;
+    private System.Action _postNoControlAction;
 
     private void Start()
     {
@@ -44,6 +45,7 @@ public class HumainMove : MonoBehaviour
         animationController.doCatch = true;
         _forceNoControllerTimer = 2;
         _moveDirection = new Vector2(0, 0);
+        _postNoControlAction = GameSystem.instance.CheckWin;
     }
 
     void Update()
@@ -56,6 +58,11 @@ public class HumainMove : MonoBehaviour
             if (_forceNoControllerTimer > 0)
             {
                 _forceNoControllerTimer -= Time.deltaTime;
+                if (_forceNoControllerTimer <= 0)
+                {
+                    _postNoControlAction?.Invoke();
+                    _postNoControlAction = null;
+                }
             }
             else
             {
@@ -160,10 +167,16 @@ public class HumainMove : MonoBehaviour
 
     public void ResetMove()
     {
-        Stop();
         _dropSpeed = 0;
+
+        _upKeyDown = false;
+        _downKeyDown = false;
+        _rightKeyDown = false;
+        _leftKeyDown = false;
         _shiftKeyDown = false;
+
         _forceNoControllerTimer = 0;
+
         animationController.doPick = false;
         animationController.doCatch = false;
         animationController.doStandup = false;
@@ -171,6 +184,8 @@ public class HumainMove : MonoBehaviour
         animationController.stopWalk = false;
         animationController.startAcc = false;
         animationController.stopAcc = false;
+        //Stop();
+        animationController.stopWalk = true;
     }
 
     void Stop()

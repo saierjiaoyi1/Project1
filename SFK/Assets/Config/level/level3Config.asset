@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd0e045cc6689f248acf50a7f4c6a288, type: 3}
   m_Name: level3Config
   m_EditorClassIdentifier: 
-  id: 2
+  id: 3
+  title: Level 3
+  desc: use your cat food
   cat1: {fileID: 0}
   cat2: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
   cat3: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
   cat4: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
+  usableItemsCount:
+    bug: 1
+    catSnack: 1
+    catToiletAcc: 1

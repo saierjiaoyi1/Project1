@@ -11,6 +11,7 @@ public class CatUiBehaviour : MonoBehaviour
 
     public void Hide()
     {
+        //Debug.Log("CatUiBehaviour Hide");
         view.SetActive(false);
     }
 
@@ -21,8 +22,9 @@ public class CatUiBehaviour : MonoBehaviour
         caughtView.SetActive(true);
     }
 
-    public void SetFree()
+    public void Show()
     {
+        //Debug.Log("CatUiBehaviour Show");
         view.SetActive(true);
         barView.SetActive(true);
         caughtView.SetActive(false);

@@ -18,7 +18,6 @@ public class Cat : MonoBehaviour
     private void Awake()
     {
         cats.Add(this);
-        cub.Hide();
     }
 
     public void Caught()
@@ -30,6 +29,7 @@ public class Cat : MonoBehaviour
     public void Init(CatConfig cc, Transform spawnTrans)
     {
         Debug.Log("cat Init");
+        Debug.Log(cc);
         cfg = cc;
 
         if (cc == null)
@@ -39,7 +39,7 @@ public class Cat : MonoBehaviour
             return;
         }
 
-        cub.SetFree();
+        cub.Show();
         gameObject.SetActive(true);
         catAppearanceBehaviour.mr.material = cc.mat;
 

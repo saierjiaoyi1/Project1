@@ -77,7 +77,7 @@ public class LevelSystem : MonoBehaviour
 
     public void CreateNewLevel(LevelConfig cfg)
     {
-        LevelRuntimeData data = new LevelRuntimeData();
+        data = new LevelRuntimeData();
         data.id = cfg.id;
         data.usableItemsCount = cfg.usableItemsCount;
         data.startTime = Time.time;

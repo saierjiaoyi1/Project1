@@ -12,11 +12,21 @@ public class UiSystem : MonoBehaviour
         instance = this;
     }
 
+    public void OnPreplay()
+    {
+        prePanel.SetActive(true);
+        gamePanel.SetActive(false);
+    }
+
     public void OnClickPlay()
     {
         prePanel.SetActive(false);
-        gamePanel.SetActive(true);
         GameSystem.instance.EnterGame();
+    }
+
+    public void OnEnterPlayDone()
+    {
+        gamePanel.SetActive(true);
     }
 
     public void OnClickItem(UsableItemUiBehaviour uiub)

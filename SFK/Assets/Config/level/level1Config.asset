@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: level1Config
   m_EditorClassIdentifier: 
   id: 1
+  title: Level 1
+  desc: Catch the cat!
   cat1: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
-  cat2: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
-  cat3: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
+  cat2: {fileID: 0}
+  cat3: {fileID: 0}
   cat4: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
   usableItemsCount:
     bug: 2

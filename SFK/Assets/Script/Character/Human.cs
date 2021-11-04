@@ -11,10 +11,12 @@ public class Human : MonoBehaviour
 
     public void Init()
     {
+        gameObject.SetActive(true);
         Debug.Log("Init human");
         var trans = LevelSystem.instance.levelBehaviour.level.spawnPos_human;
-        hm.ResetMove();
         transform.SetPositionAndRotation(trans.position, trans.rotation);
+        Debug.Log(trans.position);
+        hm.ResetMove();
     }
 
     public void Caught()

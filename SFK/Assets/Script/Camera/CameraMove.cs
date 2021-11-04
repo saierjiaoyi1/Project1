@@ -19,7 +19,7 @@ public class CameraMove : MonoBehaviour
         instance = this;
     }
 
-    private void Start()
+    public void ResetPosition()
     {
         cam.transform.position = camStartPos.position;
         cam.transform.eulerAngles = camStartPos.eulerAngles;
@@ -35,7 +35,7 @@ public class CameraMove : MonoBehaviour
 
     void CameraMoveDone()
     {
-        GameSystem.instance.StartGame();
+        GameSystem.instance.OnEnterPlayDone();
     }
 
     void Update()

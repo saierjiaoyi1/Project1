@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelBehaviour : MonoBehaviour
 {
@@ -13,14 +14,22 @@ public class LevelBehaviour : MonoBehaviour
     public Cat cat3;
     public Cat cat4;
     public Human human;
+    public Text levelTitle;
+    public Text levelTitle_static;
+    public Text levelDesc;
 
     public void Recreate(LevelConfig cfg)
     {
+        levelTitle_static.text = cfg.title;
+        levelTitle.text = cfg.title;
+        levelDesc.text = cfg.desc;
+
+        human.Init();
         cat1.Init(cfg.cat1, level.spawnPos_cat1);
         cat2.Init(cfg.cat2, level.spawnPos_cat2);
         cat3.Init(cfg.cat3, level.spawnPos_cat3);
         cat4.Init(cfg.cat4, level.spawnPos_cat4);
-        human.Init();
+      
 
         SyncItems(cfg.usableItemsCount);
     }
