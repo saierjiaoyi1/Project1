@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class Human : MonoBehaviour
 {
-    public HumanAnimationController hac;
     public HumainMove hm;
 
     private void Awake()
@@ -16,5 +15,10 @@ public class Human : MonoBehaviour
         var trans = LevelSystem.instance.levelBehaviour.level.spawnPos_human;
         hm.ResetMove();
         transform.SetPositionAndRotation(trans.position, trans.rotation);
+    }
+
+    public void Caught()
+    {
+        hm.Caught();
     }
 }

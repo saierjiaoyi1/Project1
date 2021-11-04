@@ -20,6 +20,7 @@ public class HumainMove : MonoBehaviour
     private float _dropSpeed;
     public float walkSpeed = 3;
     public float runSpeed = 5;
+
     public HumanAnimationController animationController;
 
     private Vector2 _moveDirection;
@@ -31,9 +32,17 @@ public class HumainMove : MonoBehaviour
     bool _shiftKeyDown;
     public Transform rotatePart;
 
+    private float _forceNoControllerTimer;
+
     private void Start()
     {
         cc.detectCollisions = true;
+    }
+
+    public void Caught()
+    {
+        animationController.doCatch = true;
+        _forceNoControllerTimer = 3;
     }
 
     void Update()
@@ -41,9 +50,16 @@ public class HumainMove : MonoBehaviour
         _moveDirection = new Vector2(0, 0);
         if (GameSystem.instance.state == GameSystem.GameState.Playing)
         {
-            ReadKeyDown();
-            ReadKeyUp();
-            SetKeyBoolValue();
+            if (_forceNoControllerTimer > 0)
+            {
+                _forceNoControllerTimer -= Time.deltaTime;
+            }
+            else
+            {
+                ReadKeyDown();
+                ReadKeyUp();
+                SetKeyBoolValue();
+            }
         }
 
         Move();
@@ -146,7 +162,7 @@ public class HumainMove : MonoBehaviour
         Stop();
         _dropSpeed = 0;
         _shiftKeyDown = false;
-
+        _forceNoControllerTimer = 0;
         animationController.doPick = false;
         animationController.doCatch = false;
         animationController.doStandup = false;

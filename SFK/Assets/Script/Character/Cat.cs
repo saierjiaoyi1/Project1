@@ -18,6 +18,11 @@ public class Cat : MonoBehaviour
         cats.Add(this);
     }
 
+    public void Caught()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Init(CatConfig cc, Transform spawnTrans)
     {
         Debug.Log("cat Init");
@@ -32,8 +37,7 @@ public class Cat : MonoBehaviour
         gameObject.SetActive(true);
         catAppearanceBehaviour.mr.material = cc.mat;
 
-        cm.speed = cfg.speed;
-        cm.ResetMove();
+        cm.ResetMove(cfg.speed);
         cab.aiConditionFetcher.SetHungerMax(cfg.hungerEndurance);
         cab.aiConditionFetcher.SetHungerMax(cfg.toiletEndurance);
         cab.aiConditionFetcher.SetAlertRange(cfg.alertRange);

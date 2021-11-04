@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.AI;
 
 public class CatMove : MonoBehaviour
 {
     public CharacterController cc;
+    private NavMeshAgent _navMeshAgent;
 
     public float speed = 4;
     public float gravity = 4;
@@ -18,9 +20,10 @@ public class CatMove : MonoBehaviour
     private bool _isJumping = false;
     public Transform rotatePart;
 
-    private void Start()
+    private void Awake()
     {
         cc.detectCollisions = true;
+        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
@@ -76,9 +79,13 @@ public class CatMove : MonoBehaviour
         }
     }
 
-    public void ResetMove()
+    public void ResetMove(float pSpeed)
     {
         Stop();
+        speed = pSpeed;
+        _navMeshAgent.speed = pSpeed;
+        _navMeshAgent.enabled = false;
+
         _dropSpeed = 0;
 
         animationController.doJump = false;
