@@ -5,7 +5,7 @@ public class CheckPointAnalyser : MonoBehaviour
 {
     private Cat _cat;
 
-    private Room _lastRoom;
+    private Checkpoint _crtExit;
     private void Awake()
     {
         _cat = GetComponent<Cat>();
@@ -80,7 +80,7 @@ public class CheckPointAnalyser : MonoBehaviour
 
         foreach (var currentCp in currentCps)
         {
-            if (currentCp.room != null && currentCp.room == _lastRoom)
+            if (currentCp == _crtExit)
             {
                 overlapExit = currentCp;
                 if (!overlapExit.isExit())
@@ -96,7 +96,7 @@ public class CheckPointAnalyser : MonoBehaviour
 
     public void Flush()
     {
-        _lastRoom = null;
+        _crtExit = null;
     }
 
     public CatAction GetAction(string activityId, bool enter, CatAction lastAction)
@@ -117,14 +117,25 @@ public class CheckPointAnalyser : MonoBehaviour
                 }
                 newAction.dest = new CatDestination();
                 newAction.dest.isRun = true;
+                newAction.dest.useNavMeshAgent = true;
 
-                var room = currentRoom;
+                var crtRoom = currentRoom;
                 var overlapExit = GetOverlapExit();
-
-                if (overlapExit == null)
+                Room conRoom = null;
+                Checkpoint overlapExitTarget = null;
+                if (overlapExit != null)
                 {
-                    _lastRoom = currentRoom;
-                    newAction.dest.useNavMeshAgent = true;
+                    conRoom = overlapExit.connectedRoom;
+                    overlapExitTarget = overlapExit.target;
+                }
+
+                bool toFindAnExit = (overlapExit == null ||
+                    (conRoom == null && overlapExitTarget == null));
+
+                if (toFindAnExit)
+                {
+                    Debug.Log("toFindAnExit");
+
                     var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
                     var deltaPos = humanPos - myPos;
                     var deltaX = deltaPos.x;
@@ -132,20 +143,21 @@ public class CheckPointAnalyser : MonoBehaviour
 
                     bool avoidCenter = (deltaZY > Mathf.Abs(deltaX));
                     bool avoidRight = (deltaX > 0);
-                    var exit = room.GetExitCpAvoidCenter();
+                    var exit = crtRoom.GetExitCpAvoidCenter();
                     if (!avoidCenter || exit == null)
                     {
-                        exit = (avoidRight ? room.GetExitCpAvoidRight() : room.GetExitCpAvoidLeft());
+                        exit = (avoidRight ? crtRoom.GetExitCpAvoidRight() : crtRoom.GetExitCpAvoidLeft());
                     }
+                    _crtExit = exit;
                     newAction.dest.pos = exit.transform.position;
                 }
                 else
                 {
                     Debug.Log("has overlapExit");
-                    if (overlapExit.target != null)
+                    if (overlapExitTarget != null)
                     {
-                        Debug.Log("has overlapExit target");
-                        var crtCpTargetPos = overlapExit.target.transform.position;
+                        Debug.Log("has overlapExitTarget");
+                        var crtCpTargetPos = overlapExitTarget.transform.position;
                         //follow cp fall jump or or stairs
                         if (overlapExit.isJump)
                         {
@@ -166,30 +178,30 @@ public class CheckPointAnalyser : MonoBehaviour
                     }
                     else
                     {
-                        newAction.dest.useNavMeshAgent = true;
-                        var conRoom = overlapExit.connectedRoom;
-                        if (conRoom != null)
+                        Debug.Log("go conRoom");
+                        Debug.Log("crtRoom " + crtRoom.gameObject.name);
+                        Debug.Log("has conRoom");
+                        Debug.Log("conRoom " + conRoom.gameObject.name);
+                        var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
+                        var deltaX = overlapExit.transform.position.x - averageX;
+                        Checkpoint exitConRoom = null;
+                        if (Mathf.Abs(deltaX) < 2)
                         {
-                            var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
-                            var deltaX = overlapExit.transform.position.x - averageX;
-                            Checkpoint exitConRoom = null;
-                            if (Mathf.Abs(deltaX) < 2)
-                            {
-                                exitConRoom = conRoom.GetExitCpAvoidCenter();
-                            }
-                            if (exitConRoom == null && deltaX < 0)
-                            {
-                                exitConRoom = conRoom.GetExitCpAvoidRight();
-                            }
-                            if (exitConRoom == null)
-                            {
-                                exitConRoom = conRoom.GetExitCpAvoidLeft();
-                            }
-                            newAction.dest.pos = exitConRoom.transform.position;
+                            exitConRoom = conRoom.GetExitCpAvoidCenter();
                         }
+                        if (exitConRoom == null && deltaX < 0)
+                        {
+                            exitConRoom = conRoom.GetExitCpAvoidRight();
+                        }
+                        if (exitConRoom == null)
+                        {
+                            exitConRoom = conRoom.GetExitCpAvoidLeft();
+                        }
+                        newAction.dest.pos = exitConRoom.transform.position;
                     }
                 }
                 break;
+
             case "toilet":
                 if (!enter)
                 { return lastAction; }
