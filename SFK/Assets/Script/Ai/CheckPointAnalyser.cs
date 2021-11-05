@@ -107,7 +107,8 @@ public class CheckPointAnalyser : MonoBehaviour
         CatAction newAction = new CatAction();
         newAction.activityId = activityId;
         var myPos = _cat.transform.position;
-
+        var crtRoom = currentRoom;
+        newAction.lastRoom = crtRoom;
         switch (activityId)
         {
             case "run":
@@ -119,7 +120,6 @@ public class CheckPointAnalyser : MonoBehaviour
                 newAction.dest.isRun = true;
                 newAction.dest.useNavMeshAgent = true;
 
-                var crtRoom = currentRoom;
                 var overlapExit = GetOverlapExit();
                 Room conRoom = null;
                 Checkpoint overlapExitTarget = null;
@@ -172,7 +172,7 @@ public class CheckPointAnalyser : MonoBehaviour
                         }
                         else
                         {
-                            newAction.dest.useNavMeshAgent = true;
+                            newAction.dest.useNavMeshAgent = false;
                             newAction.dest.pos = crtCpTargetPos;
                         }
                     }
@@ -183,13 +183,13 @@ public class CheckPointAnalyser : MonoBehaviour
                         Debug.Log("has conRoom");
                         Debug.Log("conRoom " + conRoom.gameObject.name);
                         var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
-                        var deltaX = overlapExit.transform.position.x - averageX;
+                        var deltaX = transform.position.x - averageX;
                         Checkpoint exitConRoom = null;
-                        if (Mathf.Abs(deltaX) < 2)
+                        if (Mathf.Abs(deltaX) < 1)
                         {
                             exitConRoom = conRoom.GetExitCpAvoidCenter();
                         }
-                        if (exitConRoom == null && deltaX < 0)
+                        if (exitConRoom == null && deltaX > 0)
                         {
                             exitConRoom = conRoom.GetExitCpAvoidRight();
                         }
@@ -227,14 +227,13 @@ public class CheckPointAnalyser : MonoBehaviour
 
                 newAction.dest = new CatDestination();
                 newAction.dest.useNavMeshAgent = true;
-                var room_change = currentRoom;
                 var rooms = LevelSystem.instance.levelBehaviour.level.rooms;
                 var candidatRooms = new List<Room>();
                 foreach (var iRoom in rooms)
                 {
-                    if (iRoom != room_change)
+                    if (iRoom != newAction.lastRoom)
                     {
-                        var distRoom = Vector3.Distance(iRoom.stayCp.transform.position, room_change.stayCp.transform.position);
+                        var distRoom = Vector3.Distance(iRoom.stayCp.transform.position, newAction.lastRoom.stayCp.transform.position);
                         if (distRoom < 15)
                         {
                             candidatRooms.Add(iRoom);
@@ -257,14 +256,13 @@ public class CheckPointAnalyser : MonoBehaviour
 
                 newAction.dest = new CatDestination();
                 newAction.dest.useNavMeshAgent = true;
-                var room_walk = currentRoom;
-                var room_walk_left = room_walk.fastBound.x;
-                var room_walk_right = room_walk.fastBound.z;
+                var room_walk_left = newAction.lastRoom.fastBound.x;
+                var room_walk_right = newAction.lastRoom.fastBound.z;
                 //Debug.Log(currentRoom.gameObject.name);
                 //Debug.Log(currentRoom.fastBound);
                 var room_walk_randomPos =
                     new Vector3(Random.Range(room_walk_left, room_walk_right)
-                    , room_walk.fastBound.y
+                    , newAction.lastRoom.fastBound.y
                     , Random.Range(-0.5f, 2.1f));
                 newAction.dest.pos = room_walk_randomPos;
                 break;
@@ -278,7 +276,7 @@ public class CheckPointAnalyser : MonoBehaviour
         var currentCps = _cat.ccb.currentCps;
         foreach (var currentCp in currentCps)
         {
-            if (currentCp.isJump)
+            if (currentCp.isJump && currentCp.room == lastAction.lastRoom)
             {
                 lastAction.dest.pos = currentCp.target.transform.position;
                 return lastAction;
@@ -292,6 +290,7 @@ public class CheckPointAnalyser : MonoBehaviour
 public class CatAction
 {
     public CatDestination dest = null;
+    public Room lastRoom;
     public string activityId;//assign ok
 
     public bool isGoToilet = false;//assign ok

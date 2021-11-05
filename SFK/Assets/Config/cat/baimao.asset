@@ -15,8 +15,8 @@ MonoBehaviour:
   id: baimao
   title: "\u767D\u732B"
   desc: 1111
-  speed: 1.7
+  speed: 1.6
   hungerEndurance: 77
   toiletEndurance: 115
-  alertRange: 2.5
+  alertRange: 3
   mat: {fileID: 2100000, guid: 27ec793d5e225144dbed106b3b69483a, type: 2}

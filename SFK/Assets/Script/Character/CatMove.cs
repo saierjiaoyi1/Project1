@@ -161,8 +161,8 @@ public class CatMove : MonoBehaviour
             }
             var t = _jumpTimer / jumpTime;
             var pos = Vector3.Lerp(_jumpFromPos, _jumpTargetPos, 1 - t);
-            var jumpHeightAdd = 1.0f;
-            pos += jumpHeightAdd * Vector3.up * (0.5f - Mathf.Abs(0.5f - t));
+            //var jumpHeightAdd = 1.0f;
+            //pos += jumpHeightAdd * Vector3.up * (0.5f - Mathf.Abs(0.5f - t));
             transform.position = pos;
             return;
         }
