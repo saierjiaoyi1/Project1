@@ -114,7 +114,7 @@ public class CheckPointAnalyser : MonoBehaviour
             case "run":
                 if (!enter && Random.value > 0.5f)
                 {
-                    //return lastAction;
+                    return lastAction;
                 }
                 newAction.dest = new CatDestination();
                 newAction.dest.isRun = true;
