@@ -14,6 +14,7 @@ public class Cat : MonoBehaviour
     public CatConfig cfg { get; private set; }
     public CatMove cm;
     public CatUiBehaviour cub;
+    public CatCollisionBehaviour ccb;
 
     private void Awake()
     {
@@ -67,5 +68,10 @@ public class Cat : MonoBehaviour
     private void OnDestroy()
     {
         cats.Remove(this);
+    }
+
+    public void Act(CatAction action)
+    {
+
     }
 }

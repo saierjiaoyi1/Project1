@@ -104,4 +104,13 @@ public class CatMove : MonoBehaviour
         animationController.startWalk = false;
         animationController.stopWalk = false;
     }
+
+    public void Go(CatDestination dest)
+    {
+        //public bool useNavMeshAgent;
+        //public Vector3 pos;
+        //public bool isRun;
+        //public bool isJump;
+        //public bool isFall;
+    }
 }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CatAiBehaviour : Ticker
 {
+    private Cat _cat;
+
     public CheckPointAnalyser checkPointAnalyser;
 
     public AiConditionFetcher aiConditionFetcher;
@@ -10,6 +12,11 @@ public class CatAiBehaviour : Ticker
     private ActivityData _currentActivity;
 
     private bool _isStunned;//in forced movement (jumping / in toilet/ stunned)
+
+    private void Awake()
+    {
+        _cat = GetComponent<Cat>();
+    }
 
     protected override void Tick()
     {
@@ -59,6 +66,7 @@ public class CatAiBehaviour : Ticker
             if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
             {
                 Debug.Log("still currentActivity");
+                ProcessCurrentActivity(false);
             }
             else
             {
@@ -153,33 +161,12 @@ public class CatAiBehaviour : Ticker
         _currentActivity.durationTimer = _currentActivity.durationTime;
 
         Debug.Log("EnterActivity " + a.id);
-        ProcessCurrentActivity();
+        ProcessCurrentActivity(true);
     }
 
-    public void ProcessCurrentActivity()
+    public void ProcessCurrentActivity(bool enter=false)
     {
-        switch (_currentActivity.id)
-        {
-            case "run":
-                break;
-
-            case "toilet":
-                break;
-
-            case "eat":
-                break;
-
-            case "item":
-                break;
-
-            case "change":
-                break;
-
-            case "stay":
-                break;
-
-            case "walk":
-                break;
-        }
+        CatAction action = checkPointAnalyser.GetAction(_currentActivity.id, enter);
+        _cat.Act(action);
     }
 }
