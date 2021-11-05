@@ -12,7 +12,7 @@ public class Human : MonoBehaviour
         //Debug.Log("Init human");
         hm.ResetMove();
         var trans = LevelSystem.instance.levelBehaviour.level.spawnPos_human;
-        transform.SetPositionAndRotation(trans.position, trans.rotation);
+        transform.position = trans.position;
 
         hm.cc.enabled = true;
         //Debug.LogWarning("ResetMove");

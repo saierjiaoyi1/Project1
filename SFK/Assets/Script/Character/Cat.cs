@@ -72,10 +72,10 @@ public class Cat : MonoBehaviour
 
     public void Act(CatAction action)
     {
-        Debug.Log("cat Act");
+        Debug.Log("cat action -> " + action.activityId);
         if (action.dest != null)
         {
-            Debug.Log("dest " + action.dest.pos);
+            Debug.Log("dest  -> " + action.dest.pos);
         }
 
         if (action.isDirectlySound)

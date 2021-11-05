@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class CheckPointAnalyser : MonoBehaviour
 {
@@ -66,18 +67,20 @@ public class CheckPointAnalyser : MonoBehaviour
         }
     }
 
-    public CatAction GetAction(string activityId, bool enter)
+    public CatAction GetAction(string activityId, bool enter, CatAction lastAction)
     {
-        CatAction action = new CatAction();
-        action.activityId = activityId;
+        if (lastAction == null)
+            enter = true;
+
+        CatAction newAction = new CatAction();
+        newAction.activityId = activityId;
         var myPos = _cat.transform.position;
 
         switch (activityId)
         {
             case "run":
-                action.dest = new CatDestination();
-                action.dest.isRun = true;
-                action.dest.arriveDistance = 0.15f;
+                newAction.dest = new CatDestination();
+                newAction.dest.isRun = true;
 
                 var room = currentRoom;
                 if (currentCheckpoint == null)
@@ -94,7 +97,7 @@ public class CheckPointAnalyser : MonoBehaviour
                     {
                         exit = (avoidRight ? room.GetExitCpAvoidRight() : room.GetExitCpAvoidLeft());
                     }
-                    action.dest.pos = exit.transform.position;
+                    newAction.dest.pos = exit.transform.position;
                 }
                 else
                 {
@@ -110,18 +113,22 @@ public class CheckPointAnalyser : MonoBehaviour
                     {
                         exit = (avoidRight ? room.GetExitCpAvoidRight() : room.GetExitCpAvoidLeft());
                     }
-                    action.dest.pos = exit.transform.position;
+                    newAction.dest.pos = exit.transform.position;
                 }
 
                 break;
             case "toilet":
+                if (!enter)
+                { return lastAction; }
                 //action.dest.arriveDistance = 0.6f;
-                action.isGoToilet = true;
+                newAction.isGoToilet = true;
                 break;
 
             case "eat":
+                if (!enter)
+                { return lastAction; }
                 //action.dest.arriveDistance = 0.6f;
-                action.isGoEat = true;
+                newAction.isGoEat = true;
                 break;
 
             case "item":
@@ -130,33 +137,55 @@ public class CheckPointAnalyser : MonoBehaviour
                 break;
 
             case "change":
+                if (!enter)
+                { return lastAction; }
+
+                newAction.dest = new CatDestination();
+                newAction.dest.useNavMeshAgent = true;
+                var room_change = currentRoom;
+                var rooms = LevelSystem.instance.levelBehaviour.level.rooms;
+                var candidatRooms = new List<Room>();
+                foreach (var iRoom in rooms)
+                {
+                    if (iRoom != room_change)
+                    {
+                        var distRoom = Vector3.Distance(iRoom.stayCp.transform.position, room_change.stayCp.transform.position);
+                        if (distRoom < 12)
+                        {
+                            candidatRooms.Add(iRoom);
+                        }
+                    }
+                }
+                newAction.dest.pos = candidatRooms[Random.Range(0, candidatRooms.Count)].stayCp.transform.position;
                 break;
 
             case "stay":
                 if (enter)
                 {
-                    action.isDirectlySound = true;
+                    newAction.isDirectlySound = true;
                 }
                 break;
 
             case "walk":
-                action.dest = new CatDestination();
-                action.dest.useNavMeshAgent = true;
-                action.dest.arriveDistance = 0f;
+                if (!enter)
+                { return lastAction; }
+
+                newAction.dest = new CatDestination();
+                newAction.dest.useNavMeshAgent = true;
                 var room_walk = currentRoom;
                 var room_walk_left = room_walk.fastBound.x;
                 var room_walk_right = room_walk.fastBound.z;
-                Debug.Log(currentRoom.gameObject.name);
+                //Debug.Log(currentRoom.gameObject.name);
                 //Debug.Log(currentRoom.fastBound);
                 var room_walk_randomPos =
                     new Vector3(Random.Range(room_walk_left, room_walk_right)
                     , room_walk.fastBound.y
                     , Random.Range(-0.5f, 2.1f));
-                action.dest.pos = room_walk_randomPos;
+                newAction.dest.pos = room_walk_randomPos;
                 break;
         }
 
-        return action;
+        return newAction;
     }
 }
 
@@ -175,5 +204,5 @@ public class CatDestination
     public bool useNavMeshAgent;
     public Vector3 pos;
     public bool isRun;//assign ok
-    public float arriveDistance;//assign ok
+    public float arriveDistance=0.25f;//assign ok
 }

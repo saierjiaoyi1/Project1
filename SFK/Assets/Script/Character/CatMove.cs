@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class CatMove : MonoBehaviour
 {
+    private Cat _cat;
     public CharacterController cc;
     private NavMeshAgent _navMeshAgent;
 
@@ -37,6 +38,7 @@ public class CatMove : MonoBehaviour
 
     private void Awake()
     {
+        _cat = GetComponent<Cat>();
         cc.detectCollisions = true;
         _navMeshAgent = GetComponent<NavMeshAgent>();
     }
@@ -45,6 +47,7 @@ public class CatMove : MonoBehaviour
     {
         if (_navMeshAgent.enabled)
         {
+            CheckNavArrive();
             return;
         }
 
@@ -60,6 +63,7 @@ public class CatMove : MonoBehaviour
     {
         if (Mathf.Approximately(_moveDirection.magnitude, 0))
         {
+            //_cat.cab.OnArrived();
             Stop();
             return;
         }
@@ -70,8 +74,8 @@ public class CatMove : MonoBehaviour
         animationController.startWalk = true;
 
         var rot = Quaternion.LookRotation(moveDir);
-        //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
-        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
+        rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
+        //rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
     }
 
     public void Stop()
@@ -138,8 +142,8 @@ public class CatMove : MonoBehaviour
         {
             _navMeshAgent.enabled = true;
             _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
+            //_navMeshAgent.stoppingDistance = _dest.arriveDistance;
             _navMeshAgent.destination = _dest.pos;
-
             animationController.startWalk = true;
         }
         else
@@ -166,5 +170,14 @@ public class CatMove : MonoBehaviour
 
         var delta = _dest.pos - transform.position;
         _moveDirection = new Vector2(delta.x, delta.z);
+    }
+
+    void CheckNavArrive()
+    {
+        if (_dest.arriveDistance > Vector3.Distance(transform.position, _navMeshAgent.destination))
+        {
+            _cat.cab.OnArrived();
+            Stop();
+        }
     }
 }

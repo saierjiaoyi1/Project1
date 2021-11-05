@@ -31,10 +31,6 @@ public class CatAiBehaviour : Ticker
                     ExitActivity();
                 }
             }
-            else
-            {
-                CheckActivityEnd();
-            }
         }
 
         if (CanThink())
@@ -66,7 +62,7 @@ public class CatAiBehaviour : Ticker
     private void Think()
     {
         ActivityPrototype newActivity = GetNewActivity();
-        Debug.Log("try " + newActivity.id);
+        Debug.Log("try to " + newActivity.id);
         if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
         {
             //Debug.Log("still currentActivity");
@@ -106,7 +102,7 @@ public class CatAiBehaviour : Ticker
         {
             activity = activities.checkNearbyThings;
         }
-        if (activities.changeRoom.piority > activity.piority && (_lastActivityId == "walk" || _lastActivityId == "stay") && Random.Range(0, 100) < activities.changeRoom.happenChancePercent)
+        if (activities.changeRoom.piority > activity.piority && (_lastActivityId == "walk") && Random.Range(0, 100) < activities.changeRoom.happenChancePercent)
         {
             activity = activities.changeRoom;
         }
@@ -118,8 +114,14 @@ public class CatAiBehaviour : Ticker
         return activity;
     }
 
-    void CheckActivityEnd()
+    public void OnArrived()
     {
+        Debug.LogWarning("OnArrived!");
+        if (_currentActivity == null)
+        {
+            return;
+        }
+
         switch (_currentActivity.id)
         {
             case "toilet":
@@ -131,12 +133,12 @@ public class CatAiBehaviour : Ticker
                 break;
 
             case "item":
-                //reach finalArrivePos
+
                 break;
 
             case "change":
-                //这种的，计算一个出口，再根据exit的位置计算出对应的另一个room的stay，然后走到出口的exit，走到stay
-                //reach finalArrivePos
+            case "walk":
+                ExitActivity();
                 break;
         }
     }
@@ -150,15 +152,15 @@ public class CatAiBehaviour : Ticker
 
         switch (_currentActivity.id)
         {
-            case "run"://need any cp
+            case "run"://nav exit then nav next exit
                 break;
-            case "toilet"://need any cp
+            case "toilet"://nav targetPos to toilet
                 break;
-            case "eat"://need any cp
+            case "eat"://nav targetPos to eat
                 break;
-            case "item"://need 1 pos nav
+            case "item"://nav targetPos to item
                 break;
-            case "change"://need any cp
+            case "change"://nav targetPos in random nearby room
                 break;
             case "stay"://ok
                 break;
@@ -190,9 +192,11 @@ public class CatAiBehaviour : Ticker
         ProcessCurrentActivity(true);
     }
 
+    private CatAction _lastAction;
     public void ProcessCurrentActivity(bool enter = false)
     {
-        CatAction action = checkPointAnalyser.GetAction(_currentActivity.id, enter);
+        CatAction action = checkPointAnalyser.GetAction(_currentActivity.id, enter, _lastAction);
+        _lastAction = action;
         _cat.Act(action);
     }
 }

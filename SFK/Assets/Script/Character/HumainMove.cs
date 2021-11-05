@@ -164,8 +164,7 @@ public class HumainMove : MonoBehaviour
         animationController.startWalk = true;
 
         var rot = Quaternion.LookRotation(moveDir);
-        //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
-        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y + 90, 0), 0.5f);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.6f);
     }
 
     public void ResetMove()

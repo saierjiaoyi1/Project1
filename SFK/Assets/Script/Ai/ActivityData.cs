@@ -9,7 +9,5 @@ public class ActivityData
     public float durationTime;
     public float durationTimer;
 
-    public Checkpoint cp1;
-    public Checkpoint cp2;
     public int piority;
 }
