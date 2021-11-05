@@ -60,7 +60,7 @@ public class Cat : MonoBehaviour
         cab.aiConditionFetcher.SetHungerMax(cfg.hungerEndurance);
         cab.aiConditionFetcher.SetToiletMax(cfg.toiletEndurance);
         cab.aiConditionFetcher.SetAlertRange(cfg.alertRange);
-
+        cab.checkPointAnalyser.Flush();
         transform.SetPositionAndRotation(spawnTrans.position, spawnTrans.rotation);
         cm.cc.enabled = true;
     }
@@ -82,6 +82,13 @@ public class Cat : MonoBehaviour
         {
             cac.doSound = true;
         }
-        cm.Go(action.dest);
+        if (action.isJump)
+        {
+            cm.Jump(action.dest.pos);
+        }
+        else
+        {
+            cm.Go(action.dest);
+        }
     }
 }

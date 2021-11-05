@@ -33,7 +33,14 @@ public class CatMove : MonoBehaviour
 
     private Vector2 _moveDirection;
 
+    private Vector3 _jumpTargetPos;
+    private Vector3 _jumpFromPos;
     private bool _isJumping = false;
+    public float jumpPreTime = 0.5f;
+    public float jumpTime = 0.35f;
+    private float _jumpPreTimer = 0f;
+    private float _jumpTimer = 0f;
+
     public Transform rotatePart;
 
     private void Awake()
@@ -48,6 +55,11 @@ public class CatMove : MonoBehaviour
         if (_navMeshAgent.enabled)
         {
             CheckNavArrive();
+            return;
+        }
+        if (_isJumping)
+        {
+            DoJump();
             return;
         }
 
@@ -91,26 +103,14 @@ public class CatMove : MonoBehaviour
             cc.Move(Vector3.zero);
     }
 
-    void Jump(float jumpPower)
-    {
-        if (cc.isGrounded)
-        {
-            _isJumping = true;
-            animationController.doJump = true;
-            _dropSpeed = -jumpPower;
-        }
-    }
-
     void Drop()
     {
         _dropSpeed += gravity * Time.deltaTime;
         if (cc.enabled)
             cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
 
-        if (cc.isGrounded && _dropSpeed >= 0)
-        {
-            _isJumping = false;
-        }
+        // if (cc.isGrounded && _dropSpeed >= 0)
+        //     _isJumping = false;
     }
 
     public void ResetMove(float pSpeed)
@@ -126,6 +126,48 @@ public class CatMove : MonoBehaviour
         animationController.doEat = false;
         animationController.startWalk = false;
         animationController.stopWalk = false;
+    }
+
+    public void Jump(Vector3 targetPos)
+    {
+        _navMeshAgent.enabled = false;
+        cc.enabled = false;
+        _jumpTargetPos = targetPos;
+        _jumpFromPos = transform.position;
+        _isJumping = true;
+        animationController.doJump = true;
+        _jumpPreTimer = jumpPreTime;
+        _jumpTimer = jumpTime;
+    }
+
+    void DoJump()
+    {
+        if (_jumpPreTimer > 0)
+        {
+            _jumpPreTimer -= Time.deltaTime;
+            if (_jumpPreTimer <= 0)
+            {
+                Debug.Log("start jump");
+            }
+            return;
+        }
+        if (_jumpTimer > 0)
+        {
+            _jumpTimer -= Time.deltaTime;
+            if (_jumpTimer <= 0)
+            {
+                _jumpTimer = 0;
+            }
+            var t = _jumpTimer / jumpTime;
+            var pos = Vector3.Lerp(_jumpFromPos, _jumpTargetPos, 1 - t);
+            var jumpHeightAdd = 5.0f;
+            pos += jumpHeightAdd * Vector3.up * (0.5f - Mathf.Abs(0.5f - t));
+            transform.position = pos;
+            return;
+        }
+
+        cc.enabled = true;
+        _isJumping = false;
     }
 
     private CatDestination _dest;

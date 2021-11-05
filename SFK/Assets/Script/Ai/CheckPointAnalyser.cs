@@ -5,6 +5,7 @@ public class CheckPointAnalyser : MonoBehaviour
 {
     private Cat _cat;
 
+    private Room _lastRoom;
     private void Awake()
     {
         _cat = GetComponent<Cat>();
@@ -67,6 +68,11 @@ public class CheckPointAnalyser : MonoBehaviour
         }
     }
 
+    public void Flush()
+    {
+        _lastRoom = null;
+    }
+
     public CatAction GetAction(string activityId, bool enter, CatAction lastAction)
     {
         if (lastAction == null)
@@ -83,8 +89,11 @@ public class CheckPointAnalyser : MonoBehaviour
                 newAction.dest.isRun = true;
 
                 var room = currentRoom;
-                if (currentCheckpoint == null)
+                var crtCp = currentCheckpoint;
+                if (crtCp == null)
                 {
+                    _lastRoom = currentRoom;
+                    newAction.dest.useNavMeshAgent = true;
                     var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
                     var deltaPos = humanPos - myPos;
                     var deltaX = deltaPos.x;
@@ -101,21 +110,52 @@ public class CheckPointAnalyser : MonoBehaviour
                 }
                 else
                 {
-                    var avoidPos = currentCheckpoint.transform.position;
-                    var deltaPos = avoidPos - myPos;
-                    var deltaX = deltaPos.x;
-                    var deltaZY = new Vector2(deltaPos.y, deltaPos.z).magnitude;
-
-                    bool avoidCenter = (deltaZY > Mathf.Abs(deltaX));
-                    bool avoidRight = (deltaX > 0);
-                    var exit = room.GetExitCpAvoidCenter();
-                    if (!avoidCenter || exit == null)
+                    if (crtCp.target != null)
                     {
-                        exit = (avoidRight ? room.GetExitCpAvoidRight() : room.GetExitCpAvoidLeft());
-                    }
-                    newAction.dest.pos = exit.transform.position;
-                }
+                        var crtCpTargetPos = crtCp.target.transform.position;
+                        //follow cp fall jump or or stairs
+                        if (crtCp.isJump)
+                        {
+                            newAction.dest.useNavMeshAgent = false;
+                            newAction.dest.pos = crtCpTargetPos;
+                            newAction.isJump = true;
+                        }
 
+                        else if (crtCp.isFall)
+                        {
+                            newAction.dest = null;
+                        }
+                        else
+                        {
+                            newAction.dest.useNavMeshAgent = true;
+                            newAction.dest.pos = crtCpTargetPos;
+                        }
+                    }
+                    else
+                    {
+                        newAction.dest.useNavMeshAgent = true;
+                        var conRoom = crtCp.connectedRoom;
+                        if (conRoom != null)
+                        {
+                            var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
+                            var deltaX = crtCp.transform.position.x - averageX;
+                            Checkpoint exitConRoom = null;
+                            if (Mathf.Abs(deltaX) < 2)
+                            {
+                                exitConRoom = conRoom.GetExitCpAvoidCenter();
+                            }
+                            if (exitConRoom == null && deltaX < 0)
+                            {
+                                exitConRoom = conRoom.GetExitCpAvoidRight();
+                            }
+                            if (exitConRoom == null)
+                            {
+                                exitConRoom = conRoom.GetExitCpAvoidLeft();
+                            }
+                            newAction.dest.pos = exitConRoom.transform.position;
+                        }
+                    }
+                }
                 break;
             case "toilet":
                 if (!enter)
@@ -150,7 +190,7 @@ public class CheckPointAnalyser : MonoBehaviour
                     if (iRoom != room_change)
                     {
                         var distRoom = Vector3.Distance(iRoom.stayCp.transform.position, room_change.stayCp.transform.position);
-                        if (distRoom < 12)
+                        if (distRoom < 15)
                         {
                             candidatRooms.Add(iRoom);
                         }
@@ -196,6 +236,7 @@ public class CatAction
 
     public bool isGoToilet = false;//assign ok
     public bool isGoEat = false;//assign ok
+    public bool isJump = false;//assign ok
     public bool isDirectlySound = false;//assign ok
 }
 
@@ -204,5 +245,5 @@ public class CatDestination
     public bool useNavMeshAgent;
     public Vector3 pos;
     public bool isRun;//assign ok
-    public float arriveDistance=0.25f;//assign ok
+    public float arriveDistance = 0.25f;//assign ok
 }
