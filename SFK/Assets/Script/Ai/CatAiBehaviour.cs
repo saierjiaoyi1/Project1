@@ -106,7 +106,7 @@ public class CatAiBehaviour : Ticker
         {
             activity = activities.checkNearbyThings;
         }
-        if (false && activities.changeRoom.piority > activity.piority && (_lastActivityId == "walk" || _lastActivityId == "stay") && Random.Range(0, 100) < activities.changeRoom.happenChancePercent)
+        if (activities.changeRoom.piority > activity.piority && (_lastActivityId == "walk" || _lastActivityId == "stay") && Random.Range(0, 100) < activities.changeRoom.happenChancePercent)
         {
             activity = activities.changeRoom;
         }
@@ -131,11 +131,12 @@ public class CatAiBehaviour : Ticker
                 break;
 
             case "item":
-
+                //reach finalArrivePos
                 break;
 
             case "change":
-
+                //这种的，计算一个出口，再根据exit的位置计算出对应的另一个room的stay，然后走到出口的exit，走到stay
+                //reach finalArrivePos
                 break;
         }
     }
@@ -149,25 +150,19 @@ public class CatAiBehaviour : Ticker
 
         switch (_currentActivity.id)
         {
-            case "run":
+            case "run"://need any cp
                 break;
-
-            case "toilet":
+            case "toilet"://need any cp
                 break;
-
-            case "eat":
+            case "eat"://need any cp
                 break;
-
-            case "item":
+            case "item"://need 1 pos nav
                 break;
-
-            case "change":
+            case "change"://need any cp
                 break;
-
-            case "stay":
+            case "stay"://ok
                 break;
-
-            case "walk":
+            case "walk"://ok
                 break;
         }
 

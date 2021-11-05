@@ -7,6 +7,8 @@ public class Room : MonoBehaviour
 
     public Vector3 fastBound { get; private set; }
 
+    public Checkpoint stayCp;
+
     private void Start()
     {
         float left = float.MaxValue;
@@ -22,9 +24,21 @@ public class Room : MonoBehaviour
         }
 
         fastBound = new Vector3(left, stayCp.transform.position.y, right);
+
+        foreach (var e in exits)
+        {
+            SetCpRoom(e.cp);
+        }
     }
 
-    public Checkpoint stayCp;
+    void SetCpRoom(Checkpoint cp)
+    {
+        if (cp == null || cp.room == this)
+            return;
+
+        cp.room = this;
+        SetCpRoom(cp.target);
+    }
 
     public Checkpoint GetExitCpAvoidRight()
     {
