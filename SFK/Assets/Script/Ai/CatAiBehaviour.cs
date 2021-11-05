@@ -12,6 +12,7 @@ public class CatAiBehaviour : Ticker
     private ActivityData _currentActivity;
 
     private bool _isStunned;//in forced movement (jumping / in toilet/ stunned)
+    private string _lastActivityId;
 
     private void Awake()
     {
@@ -30,7 +31,12 @@ public class CatAiBehaviour : Ticker
                     ExitActivity();
                 }
             }
+            else
+            {
+                CheckActivityEnd();
+            }
         }
+
         if (CanThink())
         {
             Think();
@@ -61,17 +67,14 @@ public class CatAiBehaviour : Ticker
     {
         ActivityPrototype newActivity = GetNewActivity();
         Debug.Log("try " + newActivity.id);
-        if (newActivity != null)
+        if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
         {
-            if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
-            {
-                //Debug.Log("still currentActivity");
-                ProcessCurrentActivity(false);
-            }
-            else
-            {
-                EnterActivity(newActivity);
-            }
+            //Debug.Log("still currentActivity");
+            ProcessCurrentActivity(false);
+        }
+        else
+        {
+            EnterActivity(newActivity);
         }
     }
 
@@ -84,8 +87,6 @@ public class CatAiBehaviour : Ticker
     {
         var activities = ConfigService.instance.catActivities;
         var activity = activities.walkaround;
-        var isAfterIdle = _currentActivity != null
-            && (_currentActivity.id == "stay" || _currentActivity.id == "walk" || _currentActivity.id == "change");
 
         var NearbyHuman = aiConditionFetcher.NearbyHuman;
         if (activities.alertRun.piority > activity.piority && NearbyHuman != null)
@@ -105,16 +106,38 @@ public class CatAiBehaviour : Ticker
         {
             activity = activities.checkNearbyThings;
         }
-        if (activities.changeRoom.piority > activity.piority && isAfterIdle && Random.Range(0, 100) <= activities.changeRoom.happenChancePercent)
+        if (false && activities.changeRoom.piority > activity.piority && (_lastActivityId == "walk" || _lastActivityId == "stay") && Random.Range(0, 100) < activities.changeRoom.happenChancePercent)
         {
             activity = activities.changeRoom;
         }
-        if (activities.stay.piority > activity.piority && isAfterIdle && Random.Range(0, 100) <= activities.stay.happenChancePercent)
+        if (activities.stay.piority > activity.piority && (_lastActivityId == "walk" || _lastActivityId == "change") && Random.Range(0, 100) < activities.stay.happenChancePercent)
         {
             activity = activities.stay;
         }
 
         return activity;
+    }
+
+    void CheckActivityEnd()
+    {
+        switch (_currentActivity.id)
+        {
+            case "toilet":
+
+                break;
+
+            case "eat":
+
+                break;
+
+            case "item":
+
+                break;
+
+            case "change":
+
+                break;
+        }
     }
 
     public void ExitActivity()
@@ -151,8 +174,16 @@ public class CatAiBehaviour : Ticker
         _currentActivity = null;
     }
 
+    public void Flush()
+    {
+        _lastActivityId = "";
+        ExitActivity();
+    }
+
     protected void EnterActivity(ActivityPrototype a)
     {
+        _lastActivityId = a.id;
+
         _currentActivity = new ActivityData();
         _currentActivity.id = a.id;
         _currentActivity.piority = a.piority;
@@ -164,7 +195,7 @@ public class CatAiBehaviour : Ticker
         ProcessCurrentActivity(true);
     }
 
-    public void ProcessCurrentActivity(bool enter=false)
+    public void ProcessCurrentActivity(bool enter = false)
     {
         CatAction action = checkPointAnalyser.GetAction(_currentActivity.id, enter);
         _cat.Act(action);

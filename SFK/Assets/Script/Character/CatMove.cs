@@ -11,7 +11,7 @@ public class CatMove : MonoBehaviour
     public float speedBase = 3;
     public float speedRun
     {
-        get { return speedBase + 2.5f; }
+        get { return speedBase + 2.7f; }
     }
     float speed
     {
@@ -71,12 +71,18 @@ public class CatMove : MonoBehaviour
 
         var rot = Quaternion.LookRotation(moveDir);
         //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
-        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y - 90, 0), 0.5f);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
     }
 
     public void Stop()
     {
         animationController.stopWalk = true;
+        if (_navMeshAgent.enabled)
+        {
+            _navMeshAgent.isStopped = true;
+            _navMeshAgent.enabled = false;
+        }
+
         if (cc.enabled)
             cc.Move(Vector3.zero);
     }
@@ -133,6 +139,8 @@ public class CatMove : MonoBehaviour
             _navMeshAgent.enabled = true;
             _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
             _navMeshAgent.destination = _dest.pos;
+
+            animationController.startWalk = true;
         }
         else
         {

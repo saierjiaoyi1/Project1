@@ -21,33 +21,38 @@ public class CheckPointAnalyser : MonoBehaviour
     {
         get
         {
-            var pos = _cat.transform.position;
+            var myPos = _cat.transform.position;
             var rooms = LevelSystem.instance.levelBehaviour.level.rooms;
             int bestMatchScore = 0;
             Room matchedRoom = null;
+
             foreach (var room in rooms)
             {
-                var above = pos.y - room.fastBound.y;
-                var leftDelta = pos.x - room.fastBound.x;
-                var rightDelta = pos.x - room.fastBound.x;
-                //var roomHeight = 3;
-                var heightDelta = Mathf.Abs(1.4f - above);
-
+                //Debug.Log(room.gameObject.name);
+                var above = myPos.y - room.fastBound.y;
+                var leftDelta = myPos.x - room.fastBound.x;
+                var rightDelta = myPos.x - room.fastBound.z;
+                //roomHeight = 3;
                 var matchScore = 0;
-                if (heightDelta < 1.6f)
-                    matchScore += 3;
-
-                if (leftDelta > -1f)
+                if (above > -0.2f && above < 1f)
                 {
-                    matchScore += 1;
-                    if (leftDelta > 0.5f)
+                    //Debug.Log("height1");
+                    matchScore += 2;
+                    if (above > -0.5f && above < 3.3f)
+                    {
+                        //Debug.Log("height11");
                         matchScore += 1;
+                    }
                 }
-                if (rightDelta < 1f)
+                if (leftDelta > -0.5f && rightDelta < 0.5f)
                 {
+                    //Debug.Log("hor1");
                     matchScore += 1;
-                    if (rightDelta < -0.5f)
+                    if (leftDelta > 0.3f && rightDelta < -0.3f)
+                    {
+                        //Debug.Log("hor11");
                         matchScore += 1;
+                    }
                 }
                 if (matchScore > bestMatchScore)
                 {
@@ -55,6 +60,8 @@ public class CheckPointAnalyser : MonoBehaviour
                     bestMatchScore = matchScore;
                 }
             }
+            //Debug.Log(matchedRoom.gameObject);
+            //Debug.Log(bestMatchScore);
             return matchedRoom;
         }
     }
@@ -139,6 +146,8 @@ public class CheckPointAnalyser : MonoBehaviour
                 var room_walk = currentRoom;
                 var room_walk_left = room_walk.fastBound.x;
                 var room_walk_right = room_walk.fastBound.z;
+                Debug.Log(currentRoom.gameObject.name);
+                //Debug.Log(currentRoom.fastBound);
                 var room_walk_randomPos =
                     new Vector3(Random.Range(room_walk_left, room_walk_right)
                     , room_walk.fastBound.y

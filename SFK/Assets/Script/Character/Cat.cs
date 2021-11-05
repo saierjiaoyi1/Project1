@@ -35,7 +35,7 @@ public class Cat : MonoBehaviour
         }
 
         cab.SetStunned(false);
-        cab.ExitActivity();
+        cab.Flush();
     }
 
     public void Init(CatConfig cc, Transform spawnTrans)
