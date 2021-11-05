@@ -10,6 +10,8 @@ public class ActivityPrototype
     public int piority;
     public int happenChancePercent;
 
+    public bool hasDuration;
+
     public float durationMin;
     public float durationMax;
     public float duration
