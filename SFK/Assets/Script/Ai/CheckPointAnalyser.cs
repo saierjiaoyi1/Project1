@@ -63,18 +63,20 @@ public class CheckPointAnalyser : MonoBehaviour
     {
         CatAction action = new CatAction();
         action.activityId = activityId;
+        var myPos = _cat.transform.position;
+
         switch (activityId)
         {
             case "run":
+                action.dest = new CatDestination();
                 action.dest.isRun = true;
                 action.dest.arriveDistance = 0.15f;
 
                 var room = currentRoom;
-                var pos = _cat.transform.position;
                 if (currentCheckpoint == null)
                 {
                     var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
-                    var deltaPos = humanPos - pos;
+                    var deltaPos = humanPos - myPos;
                     var deltaX = deltaPos.x;
                     var deltaZY = new Vector2(deltaPos.y, deltaPos.z).magnitude;
 
@@ -90,7 +92,7 @@ public class CheckPointAnalyser : MonoBehaviour
                 else
                 {
                     var avoidPos = currentCheckpoint.transform.position;
-                    var deltaPos = avoidPos - pos;
+                    var deltaPos = avoidPos - myPos;
                     var deltaX = deltaPos.x;
                     var deltaZY = new Vector2(deltaPos.y, deltaPos.z).magnitude;
 
@@ -103,41 +105,45 @@ public class CheckPointAnalyser : MonoBehaviour
                     }
                     action.dest.pos = exit.transform.position;
                 }
-              
+
                 break;
             case "toilet":
-                action.dest.arriveDistance = 0.6f;
-                action.isToilet = true;
+                //action.dest.arriveDistance = 0.6f;
+                action.isGoToilet = true;
                 break;
 
             case "eat":
-                action.dest.arriveDistance = 0.6f;
-                action.isEat = true;
+                //action.dest.arriveDistance = 0.6f;
+                action.isGoEat = true;
                 break;
 
             case "item":
-                action.dest.arriveDistance = 0.15f;
-                if (enter)
-                {
-                    action.isSound = true;
-                }
+                //action.dest.arriveDistance = 0.15f;
+                // action.isDirectlySound = true; sound after arrive
                 break;
 
             case "change":
-                action.dest.arriveDistance = 0f;
                 break;
 
             case "stay":
-                action.dest.arriveDistance = 0f;
                 if (enter)
                 {
-                    action.isSound = true;
+                    action.isDirectlySound = true;
                 }
-                action.isStay = true;
                 break;
 
             case "walk":
+                action.dest = new CatDestination();
+                action.dest.useNavMeshAgent = true;
                 action.dest.arriveDistance = 0f;
+                var room_walk = currentRoom;
+                var room_walk_left = room_walk.fastBound.x;
+                var room_walk_right = room_walk.fastBound.z;
+                var room_walk_randomPos =
+                    new Vector3(Random.Range(room_walk_left, room_walk_right)
+                    , room_walk.fastBound.y
+                    , Random.Range(-0.5f, 2.1f));
+                action.dest.pos = room_walk_randomPos;
                 break;
         }
 
@@ -147,16 +153,15 @@ public class CheckPointAnalyser : MonoBehaviour
 
 public class CatAction
 {
-    public CatDestination dest;
+    public CatDestination dest = null;
     public string activityId;//assign ok
 
-    public bool isToilet = false;//assign ok
-    public bool isEat = false;//assign ok
-    public bool isSound = false;//assign ok
-    public bool isStay = false;//assign ok
+    public bool isGoToilet = false;//assign ok
+    public bool isGoEat = false;//assign ok
+    public bool isDirectlySound = false;//assign ok
 }
 
-public struct CatDestination
+public class CatDestination
 {
     public bool useNavMeshAgent;
     public Vector3 pos;

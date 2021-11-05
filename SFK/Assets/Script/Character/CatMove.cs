@@ -13,7 +13,17 @@ public class CatMove : MonoBehaviour
     {
         get { return speedBase + 2.5f; }
     }
-
+    float speed
+    {
+        get
+        {
+            if (_dest != null && _dest.isRun)
+            {
+                return speedRun;
+            }
+            return speedBase;
+        }
+    }
     public float gravity = 8;
 
     private float _dropSpeed;
@@ -33,8 +43,7 @@ public class CatMove : MonoBehaviour
 
     void Update()
     {
-        // if (GameSystem.instance.state == GameSystem.GameState.Playing)
-
+        UpdateMoveDirection();
         Move();
         if (!cc.isGrounded)
         { Drop(); }
@@ -51,7 +60,7 @@ public class CatMove : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
-        moveDir = moveDir.normalized * speedBase * Time.deltaTime;
+        moveDir = moveDir.normalized * speed * Time.deltaTime;
         cc.Move(moveDir);
         animationController.startWalk = true;
 
@@ -60,7 +69,7 @@ public class CatMove : MonoBehaviour
         rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
     }
 
-    void Stop()
+    public void Stop()
     {
         animationController.stopWalk = true;
         if (cc.enabled)
@@ -93,11 +102,10 @@ public class CatMove : MonoBehaviour
     {
         Stop();
         speedBase = pSpeed;
-        _navMeshAgent.speed = speedBase;
         _navMeshAgent.enabled = false;
 
         _dropSpeed = 0;
-
+        _dest = null;
         animationController.doJump = false;
         animationController.doSound = false;
         animationController.doEat = false;
@@ -105,12 +113,44 @@ public class CatMove : MonoBehaviour
         animationController.stopWalk = false;
     }
 
+    private CatDestination _dest;
     public void Go(CatDestination dest)
     {
+        _dest = dest;
+        if (_dest == null)
+        {
+            Stop();
+        }
+
+        if (_dest.useNavMeshAgent)
+        {
+            _navMeshAgent.enabled = true;
+        }
+        else
+        {
+            _navMeshAgent.enabled = false;
+            _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
+            _navMeshAgent.destination = _dest.pos;
+        }
         //public bool useNavMeshAgent;
         //public Vector3 pos;
         //public bool isRun;
-        //public bool isJump;
-        //public bool isFall;
+        //public float arriveDistance;
+    }
+
+    void UpdateMoveDirection()
+    {
+        _moveDirection = Vector2.zero;
+        if (GameSystem.instance.state != GameSystem.GameState.Playing)
+            return;
+
+        if (_dest == null)
+            return;
+
+        if (_dest.useNavMeshAgent)
+            return;
+
+        var delta = _dest.pos - transform.position;
+        _moveDirection = new Vector2(delta.x, delta.z);
     }
 }

@@ -60,12 +60,12 @@ public class CatAiBehaviour : Ticker
     private void Think()
     {
         ActivityPrototype newActivity = GetNewActivity();
-        Debug.Log("newActivity " + newActivity.id);
+        Debug.Log("try " + newActivity.id);
         if (newActivity != null)
         {
             if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
             {
-                Debug.Log("still currentActivity");
+                //Debug.Log("still currentActivity");
                 ProcessCurrentActivity(false);
             }
             else
@@ -160,7 +160,7 @@ public class CatAiBehaviour : Ticker
         _currentActivity.durationTime = a.duration;
         _currentActivity.durationTimer = _currentActivity.durationTime;
 
-        Debug.Log("EnterActivity " + a.id);
+        Debug.Log("--EnterActivity " + a.id);
         ProcessCurrentActivity(true);
     }
 

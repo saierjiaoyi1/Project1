@@ -18,5 +18,5 @@ MonoBehaviour:
   speed: 5
   hungerEndurance: 77
   toiletEndurance: 115
-  alertRange: 5.13
+  alertRange: 2.5
   mat: {fileID: 2100000, guid: 27ec793d5e225144dbed106b3b69483a, type: 2}
