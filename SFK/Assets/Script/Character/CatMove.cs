@@ -43,6 +43,11 @@ public class CatMove : MonoBehaviour
 
     void Update()
     {
+        if (_navMeshAgent.enabled)
+        {
+            return;
+        }
+
         UpdateMoveDirection();
         Move();
         if (!cc.isGrounded)
@@ -66,7 +71,7 @@ public class CatMove : MonoBehaviour
 
         var rot = Quaternion.LookRotation(moveDir);
         //rotatePart.localEulerAngles = new Vector3(0, rot.eulerAngles.y, 0);
-        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y - 90, 0), 0.5f);
     }
 
     public void Stop()
@@ -120,17 +125,18 @@ public class CatMove : MonoBehaviour
         if (_dest == null)
         {
             Stop();
+            return;
         }
 
         if (_dest.useNavMeshAgent)
         {
             _navMeshAgent.enabled = true;
+            _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
+            _navMeshAgent.destination = _dest.pos;
         }
         else
         {
             _navMeshAgent.enabled = false;
-            _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
-            _navMeshAgent.destination = _dest.pos;
         }
         //public bool useNavMeshAgent;
         //public Vector3 pos;
