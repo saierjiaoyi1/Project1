@@ -72,6 +72,7 @@ public class Cat : MonoBehaviour
 
     public void Act(CatAction action)
     {
-
+        Debug.Log("cat Act");
+        Debug.Log(action.dest.pos);
     }
 }

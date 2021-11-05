@@ -5,6 +5,25 @@ public class Room : MonoBehaviour
 {
     public RoomCheckpoint[] exits;
 
+    public Vector3 fastBound { get; private set; }
+
+    private void Start()
+    {
+        float left = float.MaxValue;
+        float right = float.MinValue;
+        foreach (var e in exits)
+        {
+            var pos = e.cp.transform.position;
+            if (pos.x > right)
+                right = pos.x;
+
+            if (pos.x < left)
+                left = pos.x;
+        }
+
+        fastBound = new Vector3(left, stayCp.transform.position.y, right);
+    }
+
     public Checkpoint stayCp;
 
     public Checkpoint GetExitCpAvoidRight()
