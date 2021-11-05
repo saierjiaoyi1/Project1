@@ -10,8 +10,8 @@ public class ActivityPrototype
     public int piority;
     public int happenChancePercent;
 
-    public float durationMax;
     public float durationMin;
+    public float durationMax;
     public float duration
     {
         get

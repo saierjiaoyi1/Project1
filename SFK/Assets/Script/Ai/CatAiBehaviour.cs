@@ -3,8 +3,6 @@ using System.Collections;
 
 public class CatAiBehaviour : Ticker
 {
-    public ActivityReference activities;
-
     public CheckPointAnalyser checkPointAnalyser;
 
     public AiConditionFetcher aiConditionFetcher;

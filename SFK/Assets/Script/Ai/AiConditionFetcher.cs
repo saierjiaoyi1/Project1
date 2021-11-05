@@ -3,8 +3,8 @@ using System.Collections;
 
 public class AiConditionFetcher : Ticker
 {
-    public int hungerToleranceMax;
-    public int toiletToleranceMax;
+    public int hungerToleranceMax { get; private set; }
+    public int toiletToleranceMax { get; private set; }
     private int _hungerValue;
     private int _toiletValue;
     private float _alertRange;
