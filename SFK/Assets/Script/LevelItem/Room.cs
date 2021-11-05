@@ -29,6 +29,7 @@ public class Room : MonoBehaviour
         {
             SetCpRoom(e.cp);
         }
+        SetCpRoom(stayCp);
     }
 
     void SetCpRoom(Checkpoint cp)
