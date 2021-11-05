@@ -199,4 +199,16 @@ public class CatAiBehaviour : Ticker
         _lastAction = action;
         _cat.Act(action);
     }
+
+    public bool CheckNextJump()
+    {
+        var res = checkPointAnalyser.CheckNextJump(_lastAction);
+        if (res == null)
+        {
+            return false;
+        }
+
+        _cat.Act(res);
+        return true;
+    }
 }

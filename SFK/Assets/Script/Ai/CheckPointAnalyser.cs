@@ -272,6 +272,21 @@ public class CheckPointAnalyser : MonoBehaviour
 
         return newAction;
     }
+
+    public CatAction CheckNextJump(CatAction lastAction)
+    {
+        var currentCps = _cat.ccb.currentCps;
+        foreach (var currentCp in currentCps)
+        {
+            if (currentCp.isJump)
+            {
+                lastAction.dest.pos = currentCp.target.transform.position;
+                return lastAction;
+            }
+        }
+
+        return null;
+    }
 }
 
 public class CatAction
