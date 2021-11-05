@@ -115,10 +115,9 @@ public class CatMove : MonoBehaviour
 
     public void ResetMove(float pSpeed)
     {
-        Stop();
         speedBase = pSpeed;
         _navMeshAgent.enabled = false;
-
+        _isJumping = false;
         _dropSpeed = 0;
         _dest = null;
         animationController.doJump = false;
@@ -126,6 +125,8 @@ public class CatMove : MonoBehaviour
         animationController.doEat = false;
         animationController.startWalk = false;
         animationController.stopWalk = false;
+        cc.enabled = true;
+        Stop();
     }
 
     public void Jump(Vector3 targetPos)
@@ -166,6 +167,8 @@ public class CatMove : MonoBehaviour
             return;
         }
 
+        Debug.Log("end jump");
+        _cat.cab.SetStunned(false);
         cc.enabled = true;
         _isJumping = false;
     }

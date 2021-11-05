@@ -84,6 +84,7 @@ public class Cat : MonoBehaviour
         }
         if (action.isJump)
         {
+            cab.SetStunned(true);
             cm.Jump(action.dest.pos);
         }
         else

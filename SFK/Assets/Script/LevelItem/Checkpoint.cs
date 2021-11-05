@@ -22,6 +22,21 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
+    public bool isExit()
+    {
+        if (room != null)
+        {
+            foreach (var e in room.exits)
+            {
+                if (e.cp == this)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void Start()
     {
         if (!isFall && nearestCp == null && target == null)

@@ -11,14 +11,6 @@ public class CheckPointAnalyser : MonoBehaviour
         _cat = GetComponent<Cat>();
     }
 
-    public Checkpoint currentCheckpoint
-    {
-        get
-        {
-            return _cat.ccb.currentCheckpoint;
-        }
-    }
-
     public Room currentRoom
     {
         get
@@ -68,6 +60,40 @@ public class CheckPointAnalyser : MonoBehaviour
         }
     }
 
+    Checkpoint GetOverlapExit()
+    {
+        Checkpoint overlapExit = null;
+        var currentCps = _cat.ccb.currentCps;
+        if (currentCps.Count == 0)
+        {
+            return null;
+        }
+        if (currentCps.Count == 1)
+        {
+            overlapExit = currentCps[0];
+            if (!overlapExit.isExit())
+            {
+                return null;
+            }
+            return overlapExit;
+        }
+
+        foreach (var currentCp in currentCps)
+        {
+            if (currentCp.room != null && currentCp.room == _lastRoom)
+            {
+                overlapExit = currentCp;
+                if (!overlapExit.isExit())
+                {
+                    return null;
+                }
+                return overlapExit;
+            }
+        }
+
+        return null;
+    }
+
     public void Flush()
     {
         _lastRoom = null;
@@ -85,12 +111,17 @@ public class CheckPointAnalyser : MonoBehaviour
         switch (activityId)
         {
             case "run":
+                if (!enter && Random.value > 0.5f)
+                {
+                    //return lastAction;
+                }
                 newAction.dest = new CatDestination();
                 newAction.dest.isRun = true;
 
                 var room = currentRoom;
-                var crtCp = currentCheckpoint;
-                if (crtCp == null)
+                var overlapExit = GetOverlapExit();
+
+                if (overlapExit == null)
                 {
                     _lastRoom = currentRoom;
                     newAction.dest.useNavMeshAgent = true;
@@ -110,18 +141,20 @@ public class CheckPointAnalyser : MonoBehaviour
                 }
                 else
                 {
-                    if (crtCp.target != null)
+                    Debug.Log("has overlapExit");
+                    if (overlapExit.target != null)
                     {
-                        var crtCpTargetPos = crtCp.target.transform.position;
+                        Debug.Log("has overlapExit target");
+                        var crtCpTargetPos = overlapExit.target.transform.position;
                         //follow cp fall jump or or stairs
-                        if (crtCp.isJump)
+                        if (overlapExit.isJump)
                         {
                             newAction.dest.useNavMeshAgent = false;
                             newAction.dest.pos = crtCpTargetPos;
                             newAction.isJump = true;
                         }
 
-                        else if (crtCp.isFall)
+                        else if (overlapExit.isFall)
                         {
                             newAction.dest = null;
                         }
@@ -134,11 +167,11 @@ public class CheckPointAnalyser : MonoBehaviour
                     else
                     {
                         newAction.dest.useNavMeshAgent = true;
-                        var conRoom = crtCp.connectedRoom;
+                        var conRoom = overlapExit.connectedRoom;
                         if (conRoom != null)
                         {
                             var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
-                            var deltaX = crtCp.transform.position.x - averageX;
+                            var deltaX = overlapExit.transform.position.x - averageX;
                             Checkpoint exitConRoom = null;
                             if (Mathf.Abs(deltaX) < 2)
                             {
@@ -245,5 +278,5 @@ public class CatDestination
     public bool useNavMeshAgent;
     public Vector3 pos;
     public bool isRun;//assign ok
-    public float arriveDistance = 0.25f;//assign ok
+    public float arriveDistance = 0.15f;//assign ok
 }

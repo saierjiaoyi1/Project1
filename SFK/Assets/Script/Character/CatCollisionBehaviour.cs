@@ -1,24 +1,31 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class CatCollisionBehaviour : MonoBehaviour
 {
-    public Checkpoint currentCheckpoint { get; private set; }
+    public List<Checkpoint> currentCps;
 
     private void OnTriggerEnter(Collider other)
     {
         var cp = other.gameObject.GetComponent<Checkpoint>();
-        if (cp != null)
-        {
-            currentCheckpoint = cp;
-        }
+        if (cp == null)
+            return;
+
+        if (currentCps.Contains(cp))
+            return;
+
+        currentCps.Add(cp);
     }
 
     private void OnTriggerExit(Collider other)
     {
         var cp = other.gameObject.GetComponent<Checkpoint>();
-        if (cp != null && cp == currentCheckpoint)
-        {
-            currentCheckpoint = null;
-        }
+        if (cp == null)
+            return;
+
+        if (!currentCps.Contains(cp))
+            return;
+
+        currentCps.Remove(cp);
     }
 }
