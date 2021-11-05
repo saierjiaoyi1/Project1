@@ -26,6 +26,17 @@ public class Cat : MonoBehaviour
         cub.SetCaught();
     }
 
+    public void RestartAi()
+    {
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
+
+        cab.SetStunned(false);
+        cab.FlushActivity();
+    }
+
     public void Init(CatConfig cc, Transform spawnTrans)
     {
         //Debug.Log("cat Init");
@@ -44,6 +55,7 @@ public class Cat : MonoBehaviour
         catAppearanceBehaviour.mr.material = cc.mat;
 
         cm.ResetMove(cfg.speed);
+        cab.SetStunned(true);
         cab.aiConditionFetcher.SetHungerMax(cfg.hungerEndurance);
         cab.aiConditionFetcher.SetToiletMax(cfg.toiletEndurance);
         cab.aiConditionFetcher.SetAlertRange(cfg.alertRange);

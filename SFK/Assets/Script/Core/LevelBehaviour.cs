@@ -33,6 +33,16 @@ public class LevelBehaviour : MonoBehaviour
         cat4.Init(cfg.cat4, level.spawnPos_cat4);
     }
 
+    public void StartPlay()
+    {
+        //cat go out
+        //play sound
+        cat1.RestartAi();
+        cat2.RestartAi();
+        cat3.RestartAi();
+        cat4.RestartAi();
+    }
+
     public void SyncItems(UsableItemsCount usableItemsCount)
     {
         uiub_bug.SetCount(usableItemsCount.bug);

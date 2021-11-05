@@ -9,14 +9,34 @@ public class CatAiBehaviour : Ticker
 
     private ActivityData _currentActivity;
 
+    private bool _isStunned;//in forced movement (jumping / in toilet/ stunned)
+
     protected override void Tick()
     {
+        if (CanThink())
+        {
+            Think();
+        }
+    }
+
+    bool CanThink()
+    {
+        //game end(catched)/game start
+        //in forced movement (jumping / in toilet/ stunned)
         if (GameSystem.instance.state != GameSystem.GameState.Playing)
         {
-            return;
+            return false;
         }
+        if (_isStunned)
+        {
+            return false;
+        }
+        return true;
+    }
 
-        Think();
+    public void SetStunned(bool b)
+    {
+        _isStunned = b;
     }
 
     private void Think()
@@ -24,20 +44,13 @@ public class CatAiBehaviour : Ticker
         ActivityPrototype newActivity = GetNewActivity();
         if (newActivity != null)
         {
-            if (_currentActivity == null)
+            if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
             {
-                EnterActivity(newActivity);
+                Debug.Log("still doing _currentActivity");
             }
             else
             {
-                if (_currentActivity.piority >= newActivity.piority)
-                {
-                    Debug.Log("still doing _currentActivity");
-                }
-                else
-                {
-                    EnterActivity(newActivity);
-                }
+                EnterActivity(newActivity);
             }
         }
     }
@@ -49,7 +62,17 @@ public class CatAiBehaviour : Ticker
 
     protected ActivityPrototype GetNewActivity()
     {
-        return null;
+        var activities = ConfigService.instance.catActivities;
+        var activity = activities.walkaround;
+
+        var NearbyHuman = aiConditionFetcher.NearbyHuman;
+        if (NearbyHuman != null)
+        {
+            activity = activities.alertRun;
+        }
+
+
+        return activity;
     }
 
     protected void EnterActivity(ActivityPrototype a)
@@ -61,5 +84,10 @@ public class CatAiBehaviour : Ticker
         _currentActivity.durationTimer = _currentActivity.durationTime;
 
         Debug.Log("EnterActivity " + a.id);
+    }
+
+    public void FlushActivity()
+    {
+        _currentActivity = null;
     }
 }

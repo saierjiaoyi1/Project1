@@ -19,7 +19,15 @@ public class AiConditionFetcher : Ticker
     {
         get
         {
-            return null;//TODO
+            var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
+            var myPos = transform.position;
+            var dist = Vector3.Distance(humanPos, myPos);
+            if (_alertRange<= dist)
+            {
+                return null;
+            }
+
+            return LevelSystem.instance.levelBehaviour.human.transform;
         }
     }
 

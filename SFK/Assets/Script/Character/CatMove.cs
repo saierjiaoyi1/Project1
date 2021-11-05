@@ -8,8 +8,13 @@ public class CatMove : MonoBehaviour
     public CharacterController cc;
     private NavMeshAgent _navMeshAgent;
 
-    public float speed = 4;
-    public float gravity = 4;
+    public float speedBase = 3;
+    public float speedRun
+    {
+        get { return speedBase + 2.5f; }
+    }
+
+    public float gravity = 8;
 
     private float _dropSpeed;
 
@@ -46,7 +51,7 @@ public class CatMove : MonoBehaviour
         }
 
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
-        moveDir = moveDir.normalized * speed * Time.deltaTime;
+        moveDir = moveDir.normalized * speedBase * Time.deltaTime;
         cc.Move(moveDir);
         animationController.startWalk = true;
 
@@ -58,7 +63,8 @@ public class CatMove : MonoBehaviour
     void Stop()
     {
         animationController.stopWalk = true;
-        cc.Move(Vector3.zero);
+        if (cc.enabled)
+            cc.Move(Vector3.zero);
     }
 
     void Jump(float jumpPower)
@@ -74,7 +80,9 @@ public class CatMove : MonoBehaviour
     void Drop()
     {
         _dropSpeed += gravity * Time.deltaTime;
-        cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+        if (cc.enabled)
+            cc.Move(Vector3.down * Time.deltaTime * _dropSpeed);
+
         if (cc.isGrounded && _dropSpeed >= 0)
         {
             _isJumping = false;
@@ -84,8 +92,8 @@ public class CatMove : MonoBehaviour
     public void ResetMove(float pSpeed)
     {
         Stop();
-        speed = pSpeed;
-        _navMeshAgent.speed = pSpeed;
+        speedBase = pSpeed;
+        _navMeshAgent.speed = speedBase;
         _navMeshAgent.enabled = false;
 
         _dropSpeed = 0;

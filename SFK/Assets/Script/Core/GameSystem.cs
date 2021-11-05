@@ -30,7 +30,7 @@ public class GameSystem : MonoBehaviour
         CameraMove.instance.ResetPosition();
         GameSystem.instance.state = GameSystem.GameState.None;
         var level = LevelSystem.instance.GetNextLevel();
-        if (level!=null)
+        if (level != null)
         {
             LevelSystem.instance.CreateNewLevel(LevelSystem.instance.GetNextLevel());
             UiSystem.instance.OnPreplay();
@@ -46,8 +46,7 @@ public class GameSystem : MonoBehaviour
     {
         EnableGameplayController();
         UiSystem.instance.OnEnterPlayDone();
-        //cat go out
-        //play sound
+        LevelSystem.instance.levelBehaviour.StartPlay();
     }
 
     void EnableGameplayController()
