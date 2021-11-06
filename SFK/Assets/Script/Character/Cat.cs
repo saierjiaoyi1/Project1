@@ -87,6 +87,11 @@ public class Cat : MonoBehaviour
             cab.SetStunned(true);
             cm.Jump(action.dest.pos);
         }
+        else if (action.isFollow)
+        {
+            cab.SetStunned(true);
+            cm.Go(action.dest);
+        }
         else
         {
             cm.Go(action.dest);

@@ -124,6 +124,21 @@ public class CatAiBehaviour : Ticker
 
         switch (_currentActivity.id)
         {
+            case "run":
+                if (_lastAction != null)
+                {
+                    if (_lastAction.isFollow)
+                    {
+                        var has = _cat.cab.CheckNextFollow();
+                        if (!has)
+                        {
+                            Debug.Log("release from follow");
+                            SetStunned(false);
+                        }
+                    }
+                }
+                break;
+
             case "toilet":
 
                 break;
@@ -200,9 +215,9 @@ public class CatAiBehaviour : Ticker
         _cat.Act(action);
     }
 
-    public bool CheckNextJump()
+    public bool CheckNextFollow()
     {
-        var res = checkPointAnalyser.CheckNextJump(_lastAction);
+        var res = checkPointAnalyser.CheckNextFollow(_lastAction);
         if (res == null)
         {
             return false;

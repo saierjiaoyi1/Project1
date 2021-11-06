@@ -103,6 +103,7 @@ public class CheckPointAnalyser : MonoBehaviour
     {
         if (lastAction == null)
             enter = true;
+        Debug.LogWarning("--------------------- GetAction " + activityId + " " + Time.time);
 
         CatAction newAction = new CatAction();
         newAction.activityId = activityId;
@@ -112,10 +113,6 @@ public class CheckPointAnalyser : MonoBehaviour
         switch (activityId)
         {
             case "run":
-                if (!enter && Random.value > 0.5f)
-                {
-                    return lastAction;
-                }
                 newAction.dest = new CatDestination();
                 newAction.dest.isRun = true;
                 newAction.dest.useNavMeshAgent = true;
@@ -125,8 +122,13 @@ public class CheckPointAnalyser : MonoBehaviour
                 Checkpoint overlapExitTarget = null;
                 if (overlapExit != null)
                 {
+                    Debug.Log("has overlapExit " + overlapExit.gameObject.name);
                     conRoom = overlapExit.connectedRoom;
                     overlapExitTarget = overlapExit.target;
+                }
+                else
+                {
+                    Debug.Log("no overlapExit ");
                 }
 
                 bool toFindAnExit = (overlapExit == null ||
@@ -135,7 +137,6 @@ public class CheckPointAnalyser : MonoBehaviour
                 if (toFindAnExit)
                 {
                     Debug.Log("toFindAnExit");
-
                     var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
                     var deltaPos = humanPos - myPos;
                     var deltaX = deltaPos.x;
@@ -153,39 +154,35 @@ public class CheckPointAnalyser : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("has overlapExit");
+                    Debug.Log("go to another room");
                     if (overlapExitTarget != null)
                     {
                         Debug.Log("has overlapExitTarget");
                         var crtCpTargetPos = overlapExitTarget.transform.position;
-                        //follow cp fall jump or or stairs
                         if (overlapExit.isJump)
                         {
+                            Debug.Log("to jump");
                             newAction.dest.useNavMeshAgent = false;
                             newAction.dest.pos = crtCpTargetPos;
                             newAction.isJump = true;
                         }
-
-                        else if (overlapExit.isFall)
-                        {
-                            newAction.dest = null;
-                        }
                         else
                         {
+                            Debug.Log("to follow");
                             newAction.dest.useNavMeshAgent = false;
                             newAction.dest.pos = crtCpTargetPos;
+                            newAction.isFollow = true;
                         }
                     }
                     else
                     {
-                        Debug.Log("go conRoom");
                         Debug.Log("crtRoom " + crtRoom.gameObject.name);
-                        Debug.Log("has conRoom");
-                        Debug.Log("conRoom " + conRoom.gameObject.name);
+                        Debug.Log("has conRoom " + conRoom.gameObject.name);
                         var averageX = 0.5f * (conRoom.fastBound.x + conRoom.fastBound.z);
                         var deltaX = transform.position.x - averageX;
+                        var deltaY = Mathf.Abs(transform.position.y - conRoom.fastBound.y);
                         Checkpoint exitConRoom = null;
-                        if (Mathf.Abs(deltaX) < 1)
+                        if (deltaY > 1.4f || Mathf.Abs(deltaX) < 0.6f)
                         {
                             exitConRoom = conRoom.GetExitCpAvoidCenter();
                         }
@@ -271,14 +268,16 @@ public class CheckPointAnalyser : MonoBehaviour
         return newAction;
     }
 
-    public CatAction CheckNextJump(CatAction lastAction)
+    public CatAction CheckNextFollow(CatAction lastAction)
     {
         var currentCps = _cat.ccb.currentCps;
         foreach (var currentCp in currentCps)
         {
-            if (currentCp.isJump && currentCp.room == lastAction.lastRoom)
+            if (currentCp.room == lastAction.lastRoom && currentCp.target != null)
             {
                 lastAction.dest.pos = currentCp.target.transform.position;
+                lastAction.isJump = currentCp.isJump;
+                lastAction.isFollow = !lastAction.isJump;
                 return lastAction;
             }
         }
@@ -297,6 +296,8 @@ public class CatAction
     public bool isGoEat = false;//assign ok
     public bool isJump = false;//assign ok
     public bool isDirectlySound = false;//assign ok
+    public bool isFall = false;//assign ok
+    public bool isFollow = false;//assign ok
 }
 
 public class CatDestination

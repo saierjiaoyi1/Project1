@@ -172,7 +172,7 @@ public class CatMove : MonoBehaviour
 
     public void EndJump()
     {
-        var has = _cat.cab.CheckNextJump();
+        var has = _cat.cab.CheckNextFollow();
         if (has)
         {
             return;
@@ -225,7 +225,16 @@ public class CatMove : MonoBehaviour
             return;
 
         var delta = _dest.pos - transform.position;
-        _moveDirection = new Vector2(delta.x, delta.z);
+        if (delta.magnitude<=0.15f)
+        {
+            _cat.cab.OnArrived();
+        }
+        else
+        {
+            delta.Normalize();
+            _moveDirection = new Vector2(delta.x, delta.z);
+        }
+   
     }
 
     void CheckNavArrive()

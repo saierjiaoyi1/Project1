@@ -22,7 +22,7 @@ public class AiConditionFetcher : Ticker
             var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
             var myPos = transform.position;
             var deltaPos = humanPos - myPos;
-            deltaPos.y = deltaPos.y * 0.67f;
+            deltaPos.y = deltaPos.y * 0.5f;
 
             var dist = deltaPos.magnitude;
             if (_alertRange <= dist)

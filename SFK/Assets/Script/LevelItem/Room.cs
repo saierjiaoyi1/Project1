@@ -30,6 +30,20 @@ public class Room : MonoBehaviour
             SetCpRoom(e.cp);
         }
         SetCpRoom(stayCp);
+
+        foreach (var e in exits)
+        {
+            AssignNearestCp(e.cp);
+        }
+    }
+
+    void AssignNearestCp(Checkpoint cp)
+    {
+        if (cp == null)
+            return;
+
+        cp.AssignNearestCp();
+        AssignNearestCp(cp.target);
     }
 
     void SetCpRoom(Checkpoint cp)
@@ -43,6 +57,7 @@ public class Room : MonoBehaviour
 
     public Checkpoint GetExitCpAvoidRight()
     {
+        Debug.Log("Avoid Right " + gameObject.name);
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
         foreach (var rcp in exits)
         {
@@ -60,6 +75,7 @@ public class Room : MonoBehaviour
 
     public Checkpoint GetExitCpAvoidLeft()
     {
+        Debug.Log("Avoid Left " + gameObject.name);
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
         foreach (var rcp in exits)
         {
@@ -77,6 +93,7 @@ public class Room : MonoBehaviour
 
     public Checkpoint GetExitCpAvoidCenter()
     {
+        Debug.Log("Avoid Center " + gameObject.name);
         List<RoomCheckpoint> candidats = new List<RoomCheckpoint>();
         foreach (var rcp in exits)
         {

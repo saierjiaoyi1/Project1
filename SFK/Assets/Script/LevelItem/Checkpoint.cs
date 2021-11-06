@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour
 {
-    public bool isFall;
     public bool isJump;
     public Checkpoint target;
 
@@ -37,21 +36,21 @@ public class Checkpoint : MonoBehaviour
         return false;
     }
 
-    private void Start()
+    public void AssignNearestCp()
     {
-        if (!isFall && nearestCp == null && target == null)
+        if (nearestCp == null && target == null && room != null)
         {
             var rooms = LevelSystem.instance.levelBehaviour.level.rooms;
             var dist = float.MaxValue;
             Checkpoint resCp = null;
-            foreach (var iRoom in rooms)
+            foreach (var otherRoom in rooms)
             {
-                if (iRoom == room)
+                if (otherRoom == room)
                 {
                     continue;
                 }
 
-                foreach (var exit in iRoom.exits)
+                foreach (var exit in otherRoom.exits)
                 {
                     var pDist = Vector3.Distance(exit.cp.transform.position, transform.position);
                     if (pDist < dist)
@@ -62,6 +61,12 @@ public class Checkpoint : MonoBehaviour
                 }
             }
 
+            if (resCp == this)
+            {
+                Debug.LogError("!!!");
+                Debug.Log(room.gameObject.name);
+                Debug.Log(gameObject.name);
+            }
             nearestCp = resCp;
         }
     }
