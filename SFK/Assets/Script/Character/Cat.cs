@@ -51,7 +51,7 @@ public class Cat : MonoBehaviour
             return;
         }
         cm.cc.enabled = false;
-        cub.Show();
+        cub.Show(cc.title);
         gameObject.SetActive(true);
         catAppearanceBehaviour.mr.material = cc.mat;
 

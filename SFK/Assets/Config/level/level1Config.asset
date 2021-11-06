@@ -17,8 +17,8 @@ MonoBehaviour:
   desc: Catch the cat!
   cat1: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
   cat2: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
-  cat3: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
-  cat4: {fileID: 11400000, guid: 9bbdeb25b8ea2e548a65ffdcd6dd7f65, type: 2}
+  cat3: {fileID: 11400000, guid: 93af5c77f3e34ac47a014b0dc84ab0e1, type: 2}
+  cat4: {fileID: 11400000, guid: ef09785b887894c4eb89edb30d8bb39a, type: 2}
   usableItemsCount:
     bug: 2
     catSnack: 0

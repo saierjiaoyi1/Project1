@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c5f31a9add9e341a8466af9cebe0e7, type: 3}
+  m_Name: buou
+  m_EditorClassIdentifier: 
+  id: buou
+  title: "\u5E03\u5076"
+  desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
+  speed: 3.75
+  hungerEndurance: 142
+  toiletEndurance: 82
+  alertRange: 3.4
+  mat: {fileID: 2100000, guid: e6adee2c952675a468848793e3111ce5, type: 2}
