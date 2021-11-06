@@ -133,7 +133,7 @@ public class CatAiBehaviour : Ticker
                         if (!has)
                         {
                             Debug.Log("release from follow");
-                            SetStunned(false);
+                            //SetStunned(false);
                         }
                     }
                 }

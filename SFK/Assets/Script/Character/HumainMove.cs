@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class HumainMove : MonoBehaviour
+public class HumainMove : Ticker
 {
     public CharacterController cc;
+    public float vitaMax = 100;
+    public float vitaReg = 5;
+    public float vitaCost = 10f;
+    public UnityEngine.UI.Slider bar;
+    private float _vita;
 
     public float speed
     {
@@ -40,6 +45,18 @@ public class HumainMove : MonoBehaviour
         cc.detectCollisions = true;
     }
 
+    protected override void Tick()
+    {
+        AddVita(vitaReg * TickTime);
+    }
+
+    void AddVita(float Delta)
+    {
+        _vita += Delta;
+        _vita = Mathf.Clamp(_vita, 0, vitaMax);
+        bar.value = _vita / vitaMax;
+    }
+
     public void Caught()
     {
         animationController.doCatch = true;
@@ -48,8 +65,9 @@ public class HumainMove : MonoBehaviour
         _postNoControlAction = GameSystem.instance.CheckWin;
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         //Debug.Log(transform.position.x);
         _moveDirection = new Vector2(0, 0);
         if (GameSystem.instance.state == GameSystem.GameState.Playing)
@@ -160,6 +178,15 @@ public class HumainMove : MonoBehaviour
 
         Vector3 moveDir = new Vector3(_moveDirection.x, 0, _moveDirection.y);
         moveDir = moveDir.normalized * speed * Time.deltaTime;
+        if (_shiftKeyDown)
+        {
+            AddVita(-vitaCost * Time.deltaTime);
+        }
+        if (_vita < 1)
+        {
+            _shiftKeyDown = false;
+            animationController.stopAcc = true;
+        }
         cc.Move(moveDir);
         animationController.startWalk = true;
 
@@ -169,6 +196,7 @@ public class HumainMove : MonoBehaviour
 
     public void ResetMove()
     {
+        AddVita(vitaMax);
         cc.enabled = false;
         _dropSpeed = 0;
 

@@ -12,7 +12,7 @@ public class CatMove : MonoBehaviour
     public float speedBase = 3;
     public float speedRun
     {
-        get { return speedBase + 2.7f; }
+        get { return speedBase + 2.9f; }
     }
     float speed
     {
@@ -139,6 +139,11 @@ public class CatMove : MonoBehaviour
         animationController.doJump = true;
         _jumpPreTimer = jumpPreTime;
         _jumpTimer = jumpTime;
+
+        var deltaDir = _jumpTargetPos - _jumpFromPos;
+        deltaDir.y = 0;
+        var rot = Quaternion.LookRotation(deltaDir);
+        rotatePart.DOLocalRotate(new Vector3(0, rot.eulerAngles.y, 0), 0.5f);
     }
 
     void DoJump()
@@ -148,7 +153,7 @@ public class CatMove : MonoBehaviour
             _jumpPreTimer -= Time.deltaTime;
             if (_jumpPreTimer <= 0)
             {
-                Debug.Log("start jump");
+                //Debug.Log("start jump");
             }
             return;
         }
@@ -178,7 +183,7 @@ public class CatMove : MonoBehaviour
             return;
         }
 
-        Debug.Log("end jump");
+        //Debug.Log("end jump");
         _cat.cab.SetStunned(false);
         cc.enabled = true;
         _isJumping = false;

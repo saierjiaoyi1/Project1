@@ -89,7 +89,7 @@ public class Cat : MonoBehaviour
         }
         else if (action.isFollow)
         {
-            cab.SetStunned(true);
+            //cab.SetStunned(true);
             cm.Go(action.dest);
         }
         else
