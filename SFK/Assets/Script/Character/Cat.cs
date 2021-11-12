@@ -50,8 +50,9 @@ public class Cat : MonoBehaviour
             cub.Hide();
             return;
         }
+
         cm.cc.enabled = false;
-        cub.Show(cc.title);
+        cub.Show(cc.title, cc.catImage);
         gameObject.SetActive(true);
         catAppearanceBehaviour.mr.material = cc.mat;
 

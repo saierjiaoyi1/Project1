@@ -13,7 +13,12 @@ public class LevelBehaviour : MonoBehaviour
     public Cat cat2;
     public Cat cat3;
     public Cat cat4;
+
     public Human human;
+
+    public Toilet toilet;
+    public EatPlace eatPlace;
+
     public Text levelTitle;
     public Text levelTitle_static;
     public Text levelDesc;

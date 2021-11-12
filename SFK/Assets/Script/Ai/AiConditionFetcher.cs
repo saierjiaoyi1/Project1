@@ -22,7 +22,7 @@ public class AiConditionFetcher : Ticker
             var humanPos = LevelSystem.instance.levelBehaviour.human.transform.position;
             var myPos = transform.position;
             var deltaPos = humanPos - myPos;
-            deltaPos.y = deltaPos.y * 0.5f;
+            deltaPos.y = deltaPos.y * 0.36f;
 
             var dist = deltaPos.magnitude;
             if (_alertRange <= dist)
@@ -101,6 +101,15 @@ public class AiConditionFetcher : Ticker
     {
         _hungerValue = 0;
         hungerToleranceMax = v;
+    }
+
+    public void OnEatFinished()
+    {
+        _hungerValue = 0;
+    }
+    public void OnToiletFinished()
+    {
+        _toiletValue = 0;
     }
 
     public void SetToiletMax(int v)

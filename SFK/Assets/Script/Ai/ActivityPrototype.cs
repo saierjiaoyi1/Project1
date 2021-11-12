@@ -21,4 +21,5 @@ public class ActivityPrototype
             return Random.Range(durationMin, durationMax);
         }
     }
+    public float coreMovementDuration;
 }

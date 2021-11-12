@@ -7,7 +7,7 @@ public class CatMove : MonoBehaviour
 {
     private Cat _cat;
     public CharacterController cc;
-    private NavMeshAgent _navMeshAgent;
+    public NavMeshAgent navMeshAgent { get; private set; }
 
     public float speedBase = 3;
     public float speedRun
@@ -47,16 +47,17 @@ public class CatMove : MonoBehaviour
     {
         _cat = GetComponent<Cat>();
         cc.detectCollisions = true;
-        _navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
     {
-        if (_navMeshAgent.enabled)
+        if (navMeshAgent.enabled)
         {
             CheckNavArrive();
             return;
         }
+
         if (_isJumping)
         {
             DoJump();
@@ -69,7 +70,6 @@ public class CatMove : MonoBehaviour
         { Drop(); }
         else { _dropSpeed = 0; }
     }
-
 
     private void Move()
     {
@@ -93,10 +93,10 @@ public class CatMove : MonoBehaviour
     public void Stop()
     {
         animationController.stopWalk = true;
-        if (_navMeshAgent.enabled)
+        if (navMeshAgent.enabled)
         {
-            _navMeshAgent.isStopped = true;
-            _navMeshAgent.enabled = false;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.enabled = false;
         }
 
         if (cc.enabled)
@@ -116,7 +116,7 @@ public class CatMove : MonoBehaviour
     public void ResetMove(float pSpeed)
     {
         speedBase = pSpeed;
-        _navMeshAgent.enabled = false;
+        navMeshAgent.enabled = false;
         _isJumping = false;
         _dropSpeed = 0;
         _dest = null;
@@ -131,7 +131,7 @@ public class CatMove : MonoBehaviour
 
     public void Jump(Vector3 targetPos)
     {
-        _navMeshAgent.enabled = false;
+        navMeshAgent.enabled = false;
         cc.enabled = false;
         _jumpTargetPos = targetPos;
         _jumpFromPos = transform.position;
@@ -201,15 +201,15 @@ public class CatMove : MonoBehaviour
 
         if (_dest.useNavMeshAgent)
         {
-            _navMeshAgent.enabled = true;
-            _navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
+            navMeshAgent.enabled = true;
+            navMeshAgent.speed = (_dest.isRun ? speedRun : speedBase);
             //_navMeshAgent.stoppingDistance = _dest.arriveDistance;
-            _navMeshAgent.destination = _dest.pos;
+            navMeshAgent.destination = _dest.pos;
             animationController.startWalk = true;
         }
         else
         {
-            _navMeshAgent.enabled = false;
+            navMeshAgent.enabled = false;
         }
         //public bool useNavMeshAgent;
         //public Vector3 pos;
@@ -230,7 +230,7 @@ public class CatMove : MonoBehaviour
             return;
 
         var delta = _dest.pos - transform.position;
-        if (delta.magnitude<=0.15f)
+        if (delta.magnitude <= 0.15f)
         {
             _cat.cab.OnArrived();
         }
@@ -239,12 +239,12 @@ public class CatMove : MonoBehaviour
             delta.Normalize();
             _moveDirection = new Vector2(delta.x, delta.z);
         }
-   
+
     }
 
     void CheckNavArrive()
     {
-        if (_dest.arriveDistance > Vector3.Distance(transform.position, _navMeshAgent.destination))
+        if (_dest.arriveDistance > Vector3.Distance(transform.position, navMeshAgent.destination))
         {
             _cat.cab.OnArrived();
             Stop();

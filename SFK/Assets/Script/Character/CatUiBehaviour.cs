@@ -9,6 +9,7 @@ public class CatUiBehaviour : MonoBehaviour
     public Slider barHunger;
     public Slider barToilet;
     public Text catName;
+    public Image img;
 
     public void Hide()
     {
@@ -23,7 +24,7 @@ public class CatUiBehaviour : MonoBehaviour
         caughtView.SetActive(true);
     }
 
-    public void Show(string s)
+    public void Show(string s, Sprite sp)
     {
         //Debug.Log("CatUiBehaviour Show");
         catName.text = s;
@@ -32,6 +33,7 @@ public class CatUiBehaviour : MonoBehaviour
         caughtView.SetActive(false);
         SetHunger(0);
         SetToilet(0);
+        img.sprite = sp;
     }
 
     public void SetHunger(float v)

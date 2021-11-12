@@ -202,14 +202,18 @@ public class CheckPointAnalyser : MonoBehaviour
             case "toilet":
                 if (!enter)
                 { return lastAction; }
-                //action.dest.arriveDistance = 0.6f;
+                newAction.dest = new CatDestination();
+                newAction.dest.useNavMeshAgent = true;
+                newAction.dest.pos = LevelSystem.instance.levelBehaviour.toilet.transform.position;
                 newAction.isGoToilet = true;
                 break;
 
             case "eat":
                 if (!enter)
                 { return lastAction; }
-                //action.dest.arriveDistance = 0.6f;
+                newAction.dest = new CatDestination();
+                newAction.dest.useNavMeshAgent = true;
+                newAction.dest.pos = LevelSystem.instance.levelBehaviour.eatPlace.transform.position;
                 newAction.isGoEat = true;
                 break;
 

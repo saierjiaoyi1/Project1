@@ -9,7 +9,7 @@ public class CatAiBehaviour : Ticker
 
     public AiConditionFetcher aiConditionFetcher;
 
-    private ActivityData _currentActivity;
+    public ActivityData currentActivity { get; private set; }
 
     private bool _isStunned;//in forced movement (jumping / in toilet/ stunned)
     private string _lastActivityId;
@@ -21,12 +21,12 @@ public class CatAiBehaviour : Ticker
 
     protected override void Tick()
     {
-        if (_currentActivity != null)
+        if (currentActivity != null)
         {
-            if (_currentActivity.hasDuration)
+            if (currentActivity.hasDuration)
             {
-                _currentActivity.durationTimer -= TickTime;
-                if (_currentActivity.durationTimer <= 0)
+                currentActivity.durationTimer -= TickTime;
+                if (currentActivity.durationTimer <= 0)
                 {
                     ExitActivity();
                 }
@@ -49,6 +49,22 @@ public class CatAiBehaviour : Ticker
         }
         if (_isStunned)
         {
+            if (_eatTimer > 0)
+            {
+                _eatTimer -= TickTime;
+                if (_eatTimer <= 0)
+                {
+                    EndEat();
+                }
+            }
+            if (_toiletTimer > 0)
+            {
+                _toiletTimer -= TickTime;
+                if (_toiletTimer <= 0)
+                {
+                    EndToilet();
+                }
+            }
             return false;
         }
         return true;
@@ -63,7 +79,7 @@ public class CatAiBehaviour : Ticker
     {
         ActivityPrototype newActivity = GetNewActivity();
         Debug.Log("try to " + newActivity.id);
-        if (_currentActivity != null && _currentActivity.piority >= newActivity.piority)
+        if (currentActivity != null && currentActivity.piority >= newActivity.piority)
         {
             //Debug.Log("still currentActivity");
             ProcessCurrentActivity(false);
@@ -117,12 +133,12 @@ public class CatAiBehaviour : Ticker
     public void OnArrived()
     {
         Debug.LogWarning("OnArrived!");
-        if (_currentActivity == null)
+        if (currentActivity == null)
         {
             return;
         }
 
-        switch (_currentActivity.id)
+        switch (currentActivity.id)
         {
             case "run":
                 if (_lastAction != null)
@@ -160,12 +176,12 @@ public class CatAiBehaviour : Ticker
 
     public void ExitActivity()
     {
-        if (_currentActivity == null)
+        if (currentActivity == null)
         {
             return;
         }
 
-        switch (_currentActivity.id)
+        switch (currentActivity.id)
         {
             case "run"://nav exit then nav next exit
                 break;
@@ -183,7 +199,7 @@ public class CatAiBehaviour : Ticker
                 break;
         }
 
-        _currentActivity = null;
+        currentActivity = null;
     }
 
     public void Flush()
@@ -196,12 +212,12 @@ public class CatAiBehaviour : Ticker
     {
         _lastActivityId = a.id;
 
-        _currentActivity = new ActivityData();
-        _currentActivity.id = a.id;
-        _currentActivity.piority = a.piority;
-        _currentActivity.hasDuration = a.hasDuration;
-        _currentActivity.durationTime = a.duration;
-        _currentActivity.durationTimer = _currentActivity.durationTime;
+        currentActivity = new ActivityData();
+        currentActivity.id = a.id;
+        currentActivity.piority = a.piority;
+        currentActivity.hasDuration = a.hasDuration;
+        currentActivity.durationTime = a.duration;
+        currentActivity.durationTimer = currentActivity.durationTime;
 
         Debug.Log("--EnterActivity " + a.id);
         ProcessCurrentActivity(true);
@@ -210,7 +226,7 @@ public class CatAiBehaviour : Ticker
     private CatAction _lastAction;
     public void ProcessCurrentActivity(bool enter = false)
     {
-        CatAction action = checkPointAnalyser.GetAction(_currentActivity.id, enter, _lastAction);
+        CatAction action = checkPointAnalyser.GetAction(currentActivity.id, enter, _lastAction);
         _lastAction = action;
         _cat.Act(action);
     }
@@ -225,5 +241,49 @@ public class CatAiBehaviour : Ticker
 
         _cat.Act(res);
         return true;
+    }
+
+    private float _eatTimer;
+    private float _toiletTimer;
+
+    public void StartEat()
+    {
+        SetStunned(true);
+        _cat.cm.Stop();
+        _cat.cac.doEat = true;
+        _eatTimer = ConfigService.instance.catActivities.goEat.coreMovementDuration;
+    }
+
+    public void StartToilet()
+    {
+        SetStunned(true);
+        _cat.cm.Stop();
+        _cat.cac.doEat = true;
+        _toiletTimer = ConfigService.instance.catActivities.goToilet.coreMovementDuration;
+
+        _cat.cm.cc.enabled = false;
+        _cat.cm.navMeshAgent.enabled = false;
+        var toiletTran = LevelSystem.instance.levelBehaviour.toilet.toiletCenter;
+        transform.SetPositionAndRotation(toiletTran.position, toiletTran.rotation);
+    }
+
+    void EndEat()
+    {
+        aiConditionFetcher.OnEatFinished();
+
+        SetStunned(false);
+        ExitActivity();
+    }
+
+    void EndToilet()
+    {
+        aiConditionFetcher.OnToiletFinished();
+        var toiletTran = LevelSystem.instance.levelBehaviour.toilet.transform;
+        transform.SetPositionAndRotation(toiletTran.position, toiletTran.rotation);
+
+        _cat.cm.cc.enabled = true;
+
+        SetStunned(false);
+        ExitActivity();
     }
 }

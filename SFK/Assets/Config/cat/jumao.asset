@@ -15,8 +15,9 @@ MonoBehaviour:
   id: jumao
   title: "\u6A58\u732B"
   desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
+  catImage: {fileID: 21300000, guid: 1f492c456d17bde4c96ec4af6301988b, type: 3}
   speed: 1.9
-  hungerEndurance: 142
-  toiletEndurance: 82
-  alertRange: 4.1
+  hungerEndurance: 30
+  toiletEndurance: 51
+  alertRange: 3.8
   mat: {fileID: 2100000, guid: 0ab77e2632497734dae7a4c5a6d8e883, type: 2}
