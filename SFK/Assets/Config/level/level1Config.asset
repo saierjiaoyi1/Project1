@@ -15,10 +15,10 @@ MonoBehaviour:
   id: 1
   title: Level tutorial
   desc: hello
-  cat1: {fileID: 11400000, guid: fd76c453dc73afc429fcb720cd297e32, type: 2}
+  cat1: {fileID: 0}
   cat2: {fileID: 11400000, guid: ef09785b887894c4eb89edb30d8bb39a, type: 2}
-  cat3: {fileID: 11400000, guid: 93af5c77f3e34ac47a014b0dc84ab0e1, type: 2}
-  cat4: {fileID: 11400000, guid: 8486dc65d0e5ae74b98b1ebff1bd6e01, type: 2}
+  cat3: {fileID: 0}
+  cat4: {fileID: 0}
   usableItemsCount:
     bug: 3
     catSnack: 3

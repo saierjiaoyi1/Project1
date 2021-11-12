@@ -186,6 +186,7 @@ public class HumainMove : Ticker
         {
             _shiftKeyDown = false;
             animationController.stopAcc = true;
+            //SoundService.instance.Play("tired");
         }
         cc.Move(moveDir);
         animationController.startWalk = true;

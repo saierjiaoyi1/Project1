@@ -252,6 +252,8 @@ public class CatAiBehaviour : Ticker
         _cat.cm.Stop();
         _cat.cac.doEat = true;
         _eatTimer = ConfigService.instance.catActivities.goEat.coreMovementDuration;
+
+        SoundService.instance.Play("eat");
     }
 
     public void StartToilet()
@@ -265,6 +267,8 @@ public class CatAiBehaviour : Ticker
         _cat.cm.navMeshAgent.enabled = false;
         var toiletTran = LevelSystem.instance.levelBehaviour.toilet.toiletCenter;
         transform.SetPositionAndRotation(toiletTran.position, toiletTran.rotation);
+
+        SoundService.instance.Play("eat");
     }
 
     void EndEat()

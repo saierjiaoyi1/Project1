@@ -247,6 +247,7 @@ public class CheckPointAnalyser : MonoBehaviour
             case "stay":
                 if (enter)
                 {
+                    SoundService.instance.Play("stay");
                     newAction.isDirectlySound = true;
                 }
                 break;
