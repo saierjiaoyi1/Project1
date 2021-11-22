@@ -15,7 +15,7 @@ MonoBehaviour:
   id: buou
   title: "\u5E03\u5076"
   desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
-  catImage: {fileID: 21300000, guid: 5daa7a4c245175c4cb55c9159fff0d0f, type: 3}
+  catImage: {fileID: 21300000, guid: b4c5ee45565db314d890789b802da761, type: 3}
   speed: 3.75
   hungerEndurance: 142
   toiletEndurance: 82

@@ -6,6 +6,7 @@ public class UiSystem : MonoBehaviour
     public static UiSystem instance;
     public GameObject gamePanel;
     public GameObject prePanel;
+    public GameObject wikiPanel;
 
     private void Awake()
     {
@@ -16,12 +17,19 @@ public class UiSystem : MonoBehaviour
     {
         prePanel.SetActive(true);
         gamePanel.SetActive(false);
+        wikiPanel.SetActive(false);
     }
 
     public void OnClickPlay()
     {
         prePanel.SetActive(false);
         GameSystem.instance.EnterGame();
+    }
+
+    public void OnClickWiki()
+    {
+        prePanel.SetActive(false);
+        wikiPanel.SetActive(true);
     }
 
     public void OnEnterPlayDone()

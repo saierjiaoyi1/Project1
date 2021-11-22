@@ -13,6 +13,7 @@ TagManager:
   - 
   - Water
   - UI
+  - UIplus
   - CatPassOnly
   - Cat
   - Human
@@ -38,8 +39,10 @@ TagManager:
   - 
   - 
   - 
-  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: default2
+    uniqueID: 112560887
     locked: 0
