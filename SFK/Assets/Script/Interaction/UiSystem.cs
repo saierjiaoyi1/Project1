@@ -7,6 +7,8 @@ public class UiSystem : MonoBehaviour
     public GameObject gamePanel;
     public GameObject prePanel;
     public GameObject wikiPanel;
+    public GameObject catInfoPanel;
+
 
     private void Awake()
     {
@@ -18,6 +20,8 @@ public class UiSystem : MonoBehaviour
         prePanel.SetActive(true);
         gamePanel.SetActive(false);
         wikiPanel.SetActive(false);
+
+        catInfoPanel.SetActive(false);
     }
 
     public void OnClickPlay()
@@ -30,6 +34,12 @@ public class UiSystem : MonoBehaviour
     {
         prePanel.SetActive(false);
         wikiPanel.SetActive(true);
+    }
+
+    public void OnClickCatInfo()
+    {
+        wikiPanel.SetActive(false);
+        catInfoPanel.SetActive(true);
     }
 
     public void OnEnterPlayDone()
