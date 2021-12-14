@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: buou
   m_EditorClassIdentifier: 
   id: buou
-  title: "\u5E03\u5076"
-  desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
+  title: Ragdoll
+  desc: Very lazy but friendly, eat a lot
   catImage: {fileID: 21300000, guid: b4c5ee45565db314d890789b802da761, type: 3}
-  speed: 3.75
-  hungerEndurance: 142
-  toiletEndurance: 82
-  alertRange: 3.4
+  speed: 3.87
+  hungerEndurance: 87
+  toiletEndurance: 239
+  alertRange: 3.39
   mat: {fileID: 2100000, guid: e6adee2c952675a468848793e3111ce5, type: 2}

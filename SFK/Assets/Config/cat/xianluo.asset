@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: xianluo
   m_EditorClassIdentifier: 
   id: xianluo
-  title: "\u66B9\u7F57\u732B"
-  desc: "\u7231\u5403\u7231\u62C9\uFF0C\u56E0\u4E3A\u592A\u80D6\u8D70\u5F97\u6162"
+  title: Siamese
+  desc: chubby chubby
   catImage: {fileID: 21300000, guid: 0fd4672ac63128b42a67a103c99ce7bd, type: 3}
-  speed: 2.25
+  speed: 2.24
   hungerEndurance: 180
   toiletEndurance: 180
   alertRange: 3.6

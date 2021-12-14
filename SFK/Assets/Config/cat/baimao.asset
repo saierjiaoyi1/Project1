@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: baimao
   m_EditorClassIdentifier: 
   id: baimao
-  title: "\u767D\u732B"
-  desc: 1111
+  title: Whity
+  desc: Sneaky but honest, dislike dirty
   catImage: {fileID: 21300000, guid: 372cccdf5e475984f888efcaa18f56fa, type: 3}
   speed: 1.7
-  hungerEndurance: 110
-  toiletEndurance: 115
+  hungerEndurance: 81
+  toiletEndurance: 239
   alertRange: 3.5
   mat: {fileID: 2100000, guid: 27ec793d5e225144dbed106b3b69483a, type: 2}

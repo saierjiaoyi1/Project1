@@ -24,7 +24,7 @@ public class switchToInfo : MonoBehaviour
     {
         go.transform.localEulerAngles = new Vector3(0, -145, 0);
         catmodel.GetComponent<Renderer>().material = cfg.mat;
-        text.text = "Name:" + cfg.id + "\nSpeed:" + cfg.speed + "\nMax hunger:" + cfg.hungerEndurance
-            + "\nMax toilet:" + cfg.toiletEndurance + "\nAlert range:" + cfg.alertRange;
+        text.text = "Name:\t\t<size=36%><color=#55DDDD>" + cfg.title + "</color></size>\n" + cfg.desc + "\n\nSpeed:\t\t" + cfg.speed + "\n\nHunger Endurance:\t\t" + cfg.hungerEndurance
+            + "\nToilet Endurance:\t\t" + cfg.toiletEndurance + "\nAlert Range:\t\t" + cfg.alertRange;
     }
 }
